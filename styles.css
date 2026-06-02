@@ -75,30 +75,30 @@ a {
   align-items: center;
   justify-content: space-between;
   min-height: 76px;
+  max-height: 76px;
+  gap: 1rem;
 }
 
 .logo {
   display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
+  align-items: center;
+  flex-shrink: 0;
   text-decoration: none;
+  line-height: 0;
 }
 
-.logo-mark {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--gold);
-  letter-spacing: 0.04em;
-}
-
-.logo-text {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--gray-200);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.logo-img {
+  display: block;
+  height: 54px;
+  width: auto;
+  max-width: 240px;
+  object-fit: contain;
+  object-position: left center;
+  box-sizing: border-box;
+  border: 2px solid var(--gold);
+  border-radius: 6px;
+  padding: 0.2rem 0.45rem;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .nav-list {
@@ -112,13 +112,19 @@ a {
   text-decoration: none;
   font-size: 0.88rem;
   font-weight: 500;
-  color: var(--gray-200);
+  color: #e8edf4;
   letter-spacing: 0.04em;
   transition: color var(--transition);
 }
 
 .nav-list a:hover {
   color: var(--gold-light);
+}
+
+.nav-list a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 .nav-cta {
@@ -262,12 +268,13 @@ a {
 }
 
 .hero-subtitle {
-  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
   font-weight: 400;
   color: var(--gray-200);
-  max-width: 520px;
+  max-width: 760px;
   margin: 0 auto 2.5rem;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.75;
 }
 
 .hero-scroll {
