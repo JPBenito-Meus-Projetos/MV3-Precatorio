@@ -3,25 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="MNPR Capital — consultoria especializada em estruturação, análise e intermediação de operações com precatórios.">
-  <title>MNPR Capital | Precatórios</title>
+  <meta name="description" content="MNPR Capital — Transformamos precatórios em soluções financeiras estratégicas de alto padrão.">
+  <title>MNPR Capital | Soluções Financeiras em Precatórios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="header">
-    <div class="container nav-wrapper">
-      <a href="#home" class="logo">MNPR Capital</a>
-      <nav>
-        <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">☰</button>
-        <ul class="nav-list" id="nav-list">
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#home" class="logo">
+        <span class="logo-mark">MNPR</span>
+        <span class="logo-text">Capital</span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav" id="nav">
+        <ul class="nav-list">
           <li><a href="#home">Home</a></li>
-          <li><a href="#quem-somos">Quem Somos</a></li>
-          <li><a href="#servicos">Serviços</a></li>
-          <li><a href="#metodologia">Metodologia</a></li>
-          <li><a href="#investidores">Investidores</a></li>
-          <li><a href="#cedentes">Cedentes</a></li>
-          <li><a href="#tecnologia">Tecnologia</a></li>
-          <li><a href="#contatos">Contatos</a></li>
+          <li><a href="#oportunidades">Oportunidades</a></li>
+          <li><a href="#processo">Processo</a></li>
+          <li><a href="#cases">Cases</a></li>
+          <li><a href="#contato" class="nav-cta">Contato</a></li>
         </ul>
       </nav>
     </div>
@@ -29,312 +36,225 @@
 
   <main>
     <section id="home" class="hero">
-      <div class="container">
-        <span class="section-badge">MNPR Capital</span>
-        <h1 class="hero-headline">
-          Transformamos oportunidades em negócios seguros no mercado de precatórios.
-        </h1>
-        <p class="hero-subheadline">
-          A MNPR Capital conecta investidores e cedentes por meio de uma metodologia própria
-          que combina inteligência de mercado, análise jurídica, tecnologia e gestão de riscos.
-        </p>
-        <div class="hero-cta">
-          <a href="#contatos" class="btn-primary">Solicitar Análise</a>
-          <a
-            href="https://wa.me/5511999999999?text=Olá%2C%20gostaria%20de%20falar%20com%20um%20especialista%20da%20MNPR%20Capital."
-            class="btn-secondary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Falar com um Especialista
-          </a>
-        </div>
+      <div class="hero-bg"></div>
+      <div class="container hero-content reveal">
+        <p class="hero-eyebrow">Institucional · Precatórios · Capital</p>
+        <h1>MNPR Capital</h1>
+        <p class="hero-subtitle">Pensamento Multidisciplinar, Resultados Extraordinários</p>
+        <a href="#contato" class="btn btn-gold">Agendar Consultoria</a>
+      </div>
+      <div class="hero-scroll">
+        <span>Explore</span>
+        <div class="hero-scroll-line"></div>
       </div>
     </section>
 
-    <section id="por-que" class="section">
+    <section id="sobre" class="section sobre">
       <div class="container">
-        <span class="section-badge">Institucional</span>
-        <h2>Por que a MNPR Capital?</h2>
-        <p class="section-intro">
-          Uma abordagem integrada que une mercado, jurídico, tecnologia e governança para
-          operações com maior assertividade e segurança.
-        </p>
-        <div class="pillar-grid">
-          <article class="pillar-card">
-            <h3>Mercado</h3>
-            <p>Acesso a uma ampla rede de cedentes e investidores.</p>
-          </article>
-          <article class="pillar-card">
-            <h3>Jurídico</h3>
-            <p>Análise especializada e mitigação de riscos.</p>
-          </article>
-          <article class="pillar-card">
-            <h3>Tecnologia</h3>
-            <p>IA e automação para ganho de escala e eficiência.</p>
-          </article>
-          <article class="pillar-card">
-            <h3>Governança</h3>
-            <p>Processos estruturados e total rastreabilidade.</p>
-          </article>
+        <div class="section-header reveal">
+          <span class="section-label">Sobre</span>
+          <h2>Transformamos precatórios em soluções financeiras estratégicas</h2>
         </div>
-        <div class="result-banner">
-          <h3>Resultado</h3>
-          <p>
-            Maior assertividade na seleção dos ativos e segurança na conclusão das operações.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="quem-somos" class="section section-alt">
-      <div class="container">
-        <span class="section-badge">Sobre nós</span>
-        <h2>Quem Somos</h2>
-        <div class="about-text">
-          <p>
-            A MNPR Capital é uma consultoria especializada na estruturação, análise e
-            intermediação de operações envolvendo precatórios federais, estaduais e municipais.
-          </p>
-          <p>
-            Atuamos de forma multidisciplinar, reunindo especialistas das áreas jurídica,
-            financeira, tecnológica e de gestão de riscos para oferecer soluções seguras,
-            transparentes e alinhadas aos objetivos de nossos clientes.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="servicos" class="section">
-      <div class="container">
-        <span class="section-badge">Soluções</span>
-        <h2>Serviços</h2>
-        <div class="services-split">
-          <div class="services-column">
-            <h3 class="column-title">Para Investidores</h3>
-            <div class="services-list">
-              <article class="service-item">
-                <h4>Originação de Ativos</h4>
-                <p>Identificação e prospecção de oportunidades aderentes ao perfil de investimento.</p>
-              </article>
-              <article class="service-item">
-                <h4>Due Diligence Jurídica</h4>
-                <p>Análise documental, processual e de riscos.</p>
-              </article>
-              <article class="service-item">
-                <h4>Avaliação Financeira</h4>
-                <p>Valuation e modelagem financeira dos ativos.</p>
-              </article>
-              <article class="service-item">
-                <h4>Estruturação da Operação</h4>
-                <p>Acompanhamento completo até a formalização da cessão.</p>
-              </article>
-            </div>
+        <div class="sobre-grid reveal">
+          <div class="sobre-text">
+            <p>
+              A <strong>MNPR Capital</strong> atua na interseção entre direito, finanças e gestão de ativos,
+              convertendo precatórios em oportunidades estruturadas para empresas, investidores e family offices.
+            </p>
+            <p>
+              Com visão multidisciplinar e rigor analítico, entregamos clareza, velocidade e segurança em cada
+              decisão — do diagnóstico inicial à execução final da estratégia.
+            </p>
           </div>
-          <div class="services-column">
-            <h3 class="column-title">Para Cedentes</h3>
-            <div class="services-list">
-              <article class="service-item">
-                <h4>Venda de Precatórios</h4>
-                <p>Acesso a investidores qualificados.</p>
-              </article>
-              <article class="service-item">
-                <h4>Avaliação do Crédito</h4>
-                <p>Análise prévia de elegibilidade.</p>
-              </article>
-              <article class="service-item">
-                <h4>Estruturação da Documentação</h4>
-                <p>Organização e validação documental.</p>
-              </article>
-              <article class="service-item">
-                <h4>Acompanhamento Integral</h4>
-                <p>Suporte durante todas as etapas da operação.</p>
-              </article>
+          <div class="sobre-metrics">
+            <div class="metric">
+              <span class="metric-value">360°</span>
+              <span class="metric-label">Visão integrada do ativo</span>
+            </div>
+            <div class="metric">
+              <span class="metric-value">Elite</span>
+              <span class="metric-label">Rede de parceiros estratégicos</span>
+            </div>
+            <div class="metric">
+              <span class="metric-value">Full</span>
+              <span class="metric-label">Ciclo completo de execução</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="metodologia" class="section section-alt">
+    <section id="oportunidades" class="section publico section-alt">
       <div class="container">
-        <span class="section-badge">Processo</span>
-        <h2>Metodologia</h2>
-        <h3 class="subsection-title">Nosso Processo</h3>
-        <ol class="process-timeline">
-          <li class="process-step">
-            <span class="step-number">1</span>
-            <div>
-              <h4>Diagnóstico</h4>
-              <p>Entendimento das necessidades e objetivos do cliente.</p>
+        <div class="section-header reveal">
+          <span class="section-label">Público</span>
+          <h2>Oportunidades para cada perfil de investidor</h2>
+          <p class="section-desc">
+            Estruturas sob medida para quem busca liquidez, diversificação ou preservação patrimonial.
+          </p>
+        </div>
+        <div class="cards-grid reveal-stagger">
+          <article class="card publico-card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+            </div>
+            <h3>Empresas</h3>
+            <p>Otimização de capital de giro e antecipação estratégica de recebíveis judiciais.</p>
+          </article>
+          <article class="card publico-card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+            <h3>Investidores</h3>
+            <p>Acesso a ativos com perfil de retorno diferenciado e due diligence especializada.</p>
+          </article>
+          <article class="card publico-card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19h16M6 19V9l6-4 6 4v10M10 19v-4h4v4"/></svg>
+            </div>
+            <h3>Fundos</h3>
+            <p>Estruturação e curadoria de carteiras com governança e transparência institucional.</p>
+          </article>
+          <article class="card publico-card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 22l2.3-7-6-4.6h7.6L12 3z"/></svg>
+            </div>
+            <h3>Family Offices</h3>
+            <p>Soluções patrimoniais de longo prazo com confidencialidade e assessoria dedicada.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="processo" class="section processo">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Processo</span>
+          <h2>Metodologia em quatro fases</h2>
+          <p class="section-desc">Do diagnóstico à execução, com rigor técnico em cada etapa.</p>
+        </div>
+        <ol class="timeline reveal-stagger">
+          <li class="timeline-item">
+            <span class="timeline-num">01</span>
+            <div class="timeline-content">
+              <h3>Diagnóstico</h3>
+              <p>Mapeamento completo do ativo, riscos, prazos e cenários de liquidez.</p>
             </div>
           </li>
-          <li class="process-step">
-            <span class="step-number">2</span>
-            <div>
-              <h4>Inteligência de Mercado</h4>
-              <p>Mapeamento de oportunidades e construção de base de ativos.</p>
+          <li class="timeline-item">
+            <span class="timeline-num">02</span>
+            <div class="timeline-content">
+              <h3>Mineração</h3>
+              <p>Identificação de oportunidades e conexão com a rede exclusiva de parceiros.</p>
             </div>
           </li>
-          <li class="process-step">
-            <span class="step-number">3</span>
-            <div>
-              <h4>Originação</h4>
-              <p>Identificação de cedentes e ativos aderentes.</p>
+          <li class="timeline-item">
+            <span class="timeline-num">03</span>
+            <div class="timeline-content">
+              <h3>Avaliação</h3>
+              <p>Modelagem financeira, precificação e estruturação da melhor alternativa.</p>
             </div>
           </li>
-          <li class="process-step">
-            <span class="step-number">4</span>
-            <div>
-              <h4>Due Diligence</h4>
-              <p>Análise jurídica, financeira e documental.</p>
-            </div>
-          </li>
-          <li class="process-step">
-            <span class="step-number">5</span>
-            <div>
-              <h4>Estruturação</h4>
-              <p>Preparação da operação e negociação.</p>
-            </div>
-          </li>
-          <li class="process-step">
-            <span class="step-number">6</span>
-            <div>
-              <h4>Conclusão</h4>
-              <p>Formalização da cessão e acompanhamento pós-negócio.</p>
+          <li class="timeline-item">
+            <span class="timeline-num">04</span>
+            <div class="timeline-content">
+              <h3>Execução</h3>
+              <p>Implementação da estratégia com acompanhamento e transparência total.</p>
             </div>
           </li>
         </ol>
+      </div>
+    </section>
 
-        <h3 class="subsection-title">Diferenciais</h3>
-        <div class="grid-cards">
-          <article class="card">
-            <h4>Inteligência Artificial</h4>
-            <p>Utilização de IA para mineração de dados públicos e identificação de oportunidades.</p>
+    <section id="cases" class="section cases section-alt">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Cases</span>
+          <h2>Resultados que falam por si</h2>
+          <p class="section-desc">Exemplos de aplicação em diferentes perfis e objetivos.</p>
+        </div>
+        <div class="cases-grid reveal-stagger">
+          <article class="case-card">
+            <span class="case-tag">Indústria</span>
+            <h3>Giro</h3>
+            <p>
+              Empresa industrial com precatórios travados em carteira. Estruturamos antecipação
+              que liberou capital para expansão operacional em 45 dias.
+            </p>
+            <span class="case-highlight">+ Capital de giro imediato</span>
           </article>
-          <article class="card">
-            <h4>Equipe Multidisciplinar</h4>
-            <p>Especialistas jurídicos, financeiros e tecnológicos atuando em conjunto.</p>
+          <article class="case-card case-featured">
+            <span class="case-tag">Indivíduos</span>
+            <h3>Diversificação</h3>
+            <p>
+              Investidor com concentração em um único precatório. Reestruturamos a posição em
+              múltiplos ativos com perfil de risco balanceado.
+            </p>
+            <span class="case-highlight">Portfólio diversificado</span>
           </article>
-          <article class="card">
-            <h4>Transparência</h4>
-            <p>Processos claros, rastreáveis e baseados em evidências.</p>
-          </article>
-          <article class="card">
-            <h4>Gestão de Riscos</h4>
-            <p>Metodologia própria de avaliação e classificação dos ativos.</p>
-          </article>
-          <article class="card">
-            <h4>Mercado</h4>
-            <p>Relacionamento com cedentes, investidores e parceiros estratégicos.</p>
+          <article class="case-card">
+            <span class="case-tag">Family Office</span>
+            <h3>Patrimônio</h3>
+            <p>
+              Família com patrimônio judicial de longo prazo. Desenhamos estratégia de preservação
+              e monetização gradual com governança familiar.
+            </p>
+            <span class="case-highlight">Preservação patrimonial</span>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="investidores" class="section">
+    <section id="diferenciais" class="section diferenciais">
       <div class="container">
-        <span class="section-badge">Investidores</span>
-        <h2>Invista com segurança no mercado de precatórios</h2>
-        <p class="section-intro">
-          Apoiamos investidores institucionais, fundos, family offices e investidores
-          qualificados na identificação e aquisição de ativos com elevado potencial de
-          retorno e segurança jurídica.
-        </p>
-        <h3 class="subsection-title">O que entregamos</h3>
-        <ul class="feature-list">
-          <li>Pipeline contínuo de oportunidades</li>
-          <li>Due diligence jurídica</li>
-          <li>Valuation dos ativos</li>
-          <li>Estruturação da cessão</li>
-          <li>Monitoramento das operações</li>
-        </ul>
-        <a href="#contatos" class="btn-primary">Solicitar Análise</a>
-      </div>
-    </section>
-
-    <section id="cedentes" class="section section-alt">
-      <div class="container">
-        <span class="section-badge">Cedentes</span>
-        <h2>Antecipe o recebimento do seu precatório</h2>
-        <p class="section-intro">
-          A MNPR Capital auxilia titulares de precatórios a transformar um direito futuro em
-          liquidez imediata, com segurança, transparência e acompanhamento especializado.
-        </p>
-        <h3 class="subsection-title">Benefícios</h3>
-        <ul class="feature-list">
-          <li>Processo simplificado</li>
-          <li>Avaliação rápida</li>
-          <li>Acesso a investidores qualificados</li>
-          <li>Suporte jurídico especializado</li>
-          <li>Transparência em todas as etapas</li>
-        </ul>
-        <a
-          href="https://wa.me/5511999999999?text=Olá%2C%20sou%20cedente%20e%20gostaria%20de%20avaliar%20meu%20precatório."
-          class="btn-secondary"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Falar com um Especialista
-        </a>
-      </div>
-    </section>
-
-    <section id="tecnologia" class="section">
-      <div class="container">
-        <span class="section-badge">Inovação</span>
-        <h2>Tecnologia e IA</h2>
-        <p class="section-intro">
-          Inteligência aplicada ao mercado de precatórios. Utilizamos tecnologias de mineração
-          de dados, automação e inteligência artificial para localizar oportunidades, validar
-          informações públicas e acelerar o processo de análise e estruturação das operações.
-        </p>
-        <h3 class="subsection-title">Aplicações</h3>
-        <div class="tech-grid">
-          <article class="tech-card">Pesquisa automatizada de processos</article>
-          <article class="tech-card">Consolidação de bases públicas</article>
-          <article class="tech-card">Análise documental</article>
-          <article class="tech-card">Classificação de oportunidades</article>
-          <article class="tech-card">Gestão do pipeline de negócios</article>
+        <div class="section-header reveal">
+          <span class="section-label">Diferenciais</span>
+          <h2>Por que a MNPR Capital</h2>
+        </div>
+        <div class="diff-grid reveal-stagger">
+          <article class="diff-card">
+            <span class="diff-icon" aria-hidden="true">◆</span>
+            <h3>Rede Exclusiva</h3>
+            <p>Acesso a investidores, fundos e operadores selecionados do mercado de precatórios.</p>
+          </article>
+          <article class="diff-card">
+            <span class="diff-icon" aria-hidden="true">◆</span>
+            <h3>Expertise Especializada</h3>
+            <p>Equipe multidisciplinar com domínio jurídico, financeiro e de estruturação de ativos.</p>
+          </article>
+          <article class="diff-card">
+            <span class="diff-icon" aria-hidden="true">◆</span>
+            <h3>Transparência Total</h3>
+            <p>Relatórios claros, comunicação constante e decisões baseadas em dados verificáveis.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <section id="contatos" class="section section-alt">
+    <section id="contato" class="section contato section-dark">
       <div class="container">
-        <span class="section-badge">Atendimento</span>
-        <h2>Contatos</h2>
-        <p class="section-intro">Fale com nossa equipe e receba uma orientação inicial sem compromisso.</p>
-        <div class="contact-grid contact-modern">
-          <article class="contact-card">
-            <span class="contact-icon">📞</span>
-            <div>
-              <p class="contact-label">Telefone</p>
-              <button class="copy-contact" type="button" data-copy="+55 11 99999-9999">
-                (11) 99999-9999
-              </button>
+        <div class="contato-wrapper reveal">
+          <div class="contato-info">
+            <span class="section-label section-label-light">Contato</span>
+            <h2>Agende sua consultoria</h2>
+            <p>Nossa equipe está pronta para entender seu caso e apresentar as melhores alternativas.</p>
+            <div class="contato-details">
+              <a href="tel:+5511300000000" class="contato-link">
+                <span class="contato-link-label">Telefone</span>
+                <span>(11) 3000-0000</span>
+              </a>
+              <a href="mailto:contato@mnprcapital.com.br" class="contato-link">
+                <span class="contato-link-label">E-mail</span>
+                <span>contato@mnprcapital.com.br</span>
+              </a>
             </div>
-          </article>
-          <article class="contact-card">
-            <span class="contact-icon">✉️</span>
-            <div>
-              <p class="contact-label">E-mail</p>
-              <button class="copy-contact" type="button" data-copy="contato@mnprcapital.com.br">
-                contato@mnprcapital.com.br
-              </button>
-            </div>
-          </article>
-        </div>
-        <a
-          class="btn-whatsapp"
-          href="https://wa.me/5511999999999?text=Olá%2C%20quero%20mais%20informações%20sobre%20precatório."
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Chamar no WhatsApp
-        </a>
-        <div class="contact-note">
-          <p>Clique no telefone ou e-mail para copiar. Atendimento de Segunda a Sexta, das 9h às 18h.</p>
+          </div>
+          <div class="contato-cta-box">
+            <p>Fale diretamente com um especialista MNPR.</p>
+            <a href="mailto:contato@mnprcapital.com.br?subject=Consultoria%20MNPR%20Capital" class="btn btn-gold btn-block">
+              Agendar Consultoria
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -342,14 +262,18 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <p class="footer-brand">MNPR Capital</p>
+      <div class="footer-brand">
+        <span class="logo-mark">MNPR</span>
+        <span class="logo-text">Capital</span>
+      </div>
+      <p class="footer-copy">&copy; 2026 MNPR Capital. Todos os direitos reservados.</p>
       <nav class="footer-nav">
         <a href="#home">Home</a>
-        <a href="#servicos">Serviços</a>
-        <a href="#metodologia">Metodologia</a>
-        <a href="#contatos">Contatos</a>
+        <a href="#oportunidades">Oportunidades</a>
+        <a href="#processo">Processo</a>
+        <a href="#cases">Cases</a>
+        <a href="#contato">Contato</a>
       </nav>
-      <p>&copy; 2026 MNPR Capital. Todos os direitos reservados.</p>
     </div>
   </footer>
 

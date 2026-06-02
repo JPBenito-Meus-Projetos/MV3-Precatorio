@@ -1,81 +1,62 @@
+const header = document.getElementById("header");
 const menuToggle = document.getElementById("menu-toggle");
-const navList = document.getElementById("nav-list");
-const header = document.querySelector(".header");
+const nav = document.getElementById("nav");
 
-if (menuToggle && navList) {
+function onScroll() {
+  if (header) {
+    header.classList.toggle("scrolled", window.scrollY > 20);
+  }
+}
+
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+
+if (menuToggle && nav) {
   menuToggle.addEventListener("click", () => {
-    navList.classList.toggle("active");
+    const isOpen = nav.classList.toggle("open");
+    menuToggle.classList.toggle("active", isOpen);
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
   });
 
-  navList.querySelectorAll("a").forEach((item) => {
-    item.addEventListener("click", () => {
-      navList.classList.remove("active");
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+      menuToggle.classList.remove("active");
+      menuToggle.setAttribute("aria-expanded", "false");
     });
   });
 }
 
-window.addEventListener("scroll", () => {
-  if (!header) {
-    return;
-  }
+const revealElements = document.querySelectorAll(".reveal, .reveal-stagger");
 
-  if (window.scrollY > 14) {
-    header.classList.add("scrolled");
-  } else {
-    header.classList.remove("scrolled");
-  }
-});
-
-const revealItems = document.querySelectorAll(".hero, .section, .footer");
 const revealObserver = new IntersectionObserver(
-  (entries, observer) => {
+  (entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) {
-        return;
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
       }
-
-      entry.target.classList.add("is-visible");
-      observer.unobserve(entry.target);
     });
   },
-  { threshold: 0.16 }
+  { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
 );
 
-revealItems.forEach((item) => {
-  revealObserver.observe(item);
-});
+revealElements.forEach((el) => revealObserver.observe(el));
 
-if (header && window.scrollY <= 14) {
-  requestAnimationFrame(() => {
-    const hero = document.querySelector(".hero");
-    if (hero) {
-      hero.classList.add("is-visible");
-    }
-  });
+const hero = document.querySelector(".hero .reveal");
+if (hero) {
+  requestAnimationFrame(() => hero.classList.add("is-visible"));
 }
 
-const copyButtons = document.querySelectorAll(".copy-contact");
-
-copyButtons.forEach((button) => {
-  button.addEventListener("click", async () => {
-    const textToCopy = button.getAttribute("data-copy");
-
-    if (!textToCopy) {
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-      const originalText = button.textContent;
-      button.textContent = "Copiado!";
-      button.classList.add("copied");
-
-      setTimeout(() => {
-        button.textContent = originalText;
-        button.classList.remove("copied");
-      }, 1300);
-    } catch (_error) {
-      alert("Não foi possível copiar automaticamente.");
-    }
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener("click", (e) => {
+    const id = anchor.getAttribute("href");
+    if (!id || id === "#") return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const offset = header ? header.offsetHeight : 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
   });
 });
