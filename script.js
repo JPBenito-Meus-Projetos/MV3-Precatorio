@@ -75,7 +75,7 @@ copyButtons.forEach((button) => {
         button.classList.remove("copied");
       }, 1300);
     } catch (_error) {
-      alert("Nao foi possivel copiar automaticamente.");
+      alert("Não foi possível copiar automaticamente.");
     }
   });
 });
