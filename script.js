@@ -1,7 +1,6 @@
 const header = document.getElementById("header");
 const menuToggle = document.getElementById("menu-toggle");
 const nav = document.getElementById("nav");
-const heroBg = document.getElementById("hero-bg");
 const heroContent = document.querySelector(".hero-content");
 
 const HEADER_SCROLL_THRESHOLD = 50;
@@ -10,15 +9,6 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 function onScroll() {
   if (header) {
     header.classList.toggle("scrolled", window.scrollY > HEADER_SCROLL_THRESHOLD);
-  }
-
-  if (!prefersReducedMotion && heroBg) {
-    const scrollY = window.scrollY;
-    const heroHeight = document.querySelector(".hero")?.offsetHeight || window.innerHeight;
-    if (scrollY < heroHeight) {
-      const offset = scrollY * 0.35;
-      heroBg.style.transform = `translate3d(0, ${offset}px, 0) scale(1.05)`;
-    }
   }
 }
 
@@ -60,7 +50,9 @@ function initHeroEntrance() {
 
 initHeroEntrance();
 
-const revealElements = document.querySelectorAll(".reveal, .reveal-stagger");
+const revealElements = document.querySelectorAll(
+  ".reveal, .reveal-stagger, .cases-visual"
+);
 
 const revealObserver = new IntersectionObserver(
   (entries) => {
@@ -70,7 +62,7 @@ const revealObserver = new IntersectionObserver(
       revealObserver.unobserve(entry.target);
     });
   },
-  { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
+  { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
 );
 
 revealElements.forEach((el) => revealObserver.observe(el));

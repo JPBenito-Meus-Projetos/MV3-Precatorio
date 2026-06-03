@@ -14,7 +14,7 @@
   <header class="header" id="header">
     <div class="container header-inner">
       <a href="#home" class="logo" aria-label="MNPR Capital — Início">
-        <img src="IMG/image.png" alt="MNPR Capital" class="logo-img" width="240" height="48">
+        <img src="IMG/logo.png" alt="MNPR Capital" class="logo-img" width="240" height="48">
       </a>
       <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
         <span></span>
@@ -52,7 +52,8 @@
     </section>
 
     <section id="sobre" class="section sobre">
-      <div class="container">
+      <div class="sobre-texture" aria-hidden="true"></div>
+      <div class="container section-content">
         <div class="section-header reveal">
           <span class="section-label">Sobre</span>
           <h2>Transformamos precatórios em soluções financeiras estratégicas</h2>
@@ -95,7 +96,7 @@
             Estruturas sob medida para quem busca liquidez, diversificação ou preservação patrimonial.
           </p>
         </div>
-        <div class="cards-grid reveal-stagger">
+        <div class="cards-grid reveal-stagger reveal-stagger-cards">
           <article class="card publico-card card-premium">
             <div class="card-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
@@ -129,13 +130,14 @@
     </section>
 
     <section id="processo" class="section processo">
-      <div class="container">
+      <div class="processo-bg" aria-hidden="true"></div>
+      <div class="container section-content">
         <div class="section-header reveal">
           <span class="section-label">Processo</span>
           <h2>Metodologia em quatro fases</h2>
           <p class="section-desc">Do diagnóstico à execução, com rigor técnico em cada etapa.</p>
         </div>
-        <ol class="timeline reveal-stagger">
+        <ol class="timeline reveal-stagger reveal-stagger-process">
           <li class="timeline-item card-premium">
             <span class="timeline-num">01</span>
             <div class="timeline-content">
@@ -175,6 +177,7 @@
           <h2>Resultados que falam por si</h2>
           <p class="section-desc">Exemplos de aplicação em diferentes perfis e objetivos.</p>
         </div>
+        <div class="cases-layout">
         <div class="cases-grid reveal-stagger">
           <article class="case-card card-premium">
             <span class="case-tag">Indústria</span>
@@ -203,6 +206,10 @@
             </p>
             <span class="case-highlight">Preservação patrimonial</span>
           </article>
+        </div>
+        <figure class="cases-visual reveal">
+          <img src="IMG/cases-detail.png" alt="" width="480" height="640" loading="lazy" decoding="async">
+        </figure>
         </div>
       </div>
     </section>
@@ -234,7 +241,8 @@
     </section>
 
     <section id="contato" class="section contato section-dark">
-      <div class="container">
+      <div class="contato-accent" aria-hidden="true"></div>
+      <div class="container section-content">
         <div class="contato-wrapper reveal">
           <div class="contato-info">
             <span class="section-label section-label-light">Contato</span>
