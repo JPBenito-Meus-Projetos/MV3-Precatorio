@@ -1,10 +1,24 @@
 const header = document.getElementById("header");
 const menuToggle = document.getElementById("menu-toggle");
 const nav = document.getElementById("nav");
+const heroBg = document.getElementById("hero-bg");
+const heroContent = document.querySelector(".hero-content");
+
+const HEADER_SCROLL_THRESHOLD = 50;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function onScroll() {
   if (header) {
-    header.classList.toggle("scrolled", window.scrollY > 20);
+    header.classList.toggle("scrolled", window.scrollY > HEADER_SCROLL_THRESHOLD);
+  }
+
+  if (!prefersReducedMotion && heroBg) {
+    const scrollY = window.scrollY;
+    const heroHeight = document.querySelector(".hero")?.offsetHeight || window.innerHeight;
+    if (scrollY < heroHeight) {
+      const offset = scrollY * 0.35;
+      heroBg.style.transform = `translate3d(0, ${offset}px, 0) scale(1.05)`;
+    }
   }
 }
 
@@ -27,26 +41,39 @@ if (menuToggle && nav) {
   });
 }
 
+function initHeroEntrance() {
+  if (!heroContent) return;
+
+  if (prefersReducedMotion) {
+    heroContent.classList.add("hero-loaded");
+    heroContent.querySelectorAll(".hero-animate").forEach((el) => {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    heroContent.classList.add("hero-loaded");
+  });
+}
+
+initHeroEntrance();
+
 const revealElements = document.querySelectorAll(".reveal, .reveal-stagger");
 
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        revealObserver.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      revealObserver.unobserve(entry.target);
     });
   },
-  { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+  { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
 );
 
 revealElements.forEach((el) => revealObserver.observe(el));
-
-const hero = document.querySelector(".hero .reveal");
-if (hero) {
-  requestAnimationFrame(() => hero.classList.add("is-visible"));
-}
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (e) => {
