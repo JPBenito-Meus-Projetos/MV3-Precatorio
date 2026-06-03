@@ -51,7 +51,7 @@ function initHeroEntrance() {
 initHeroEntrance();
 
 const revealElements = document.querySelectorAll(
-  ".reveal, .reveal-stagger, .cases-visual"
+  ".reveal, .reveal-stagger, .processo-visual"
 );
 
 const revealObserver = new IntersectionObserver(

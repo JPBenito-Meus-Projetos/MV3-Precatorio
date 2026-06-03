@@ -14,7 +14,7 @@
   <header class="header" id="header">
     <div class="container header-inner">
       <a href="#home" class="logo" aria-label="MNPR Capital — Início">
-        <img src="IMG/logo.png" alt="MNPR Capital" class="logo-img" width="240" height="48">
+        <img src="IMG/logo.png" alt="MNPR Capital" class="logo-img" width="240" height="48" decoding="async">
       </a>
       <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
         <span></span>
@@ -130,14 +130,15 @@
     </section>
 
     <section id="processo" class="section processo">
-      <div class="processo-bg" aria-hidden="true"></div>
       <div class="container section-content">
-        <div class="section-header reveal">
-          <span class="section-label">Processo</span>
-          <h2>Metodologia em quatro fases</h2>
-          <p class="section-desc">Do diagnóstico à execução, com rigor técnico em cada etapa.</p>
-        </div>
-        <ol class="timeline reveal-stagger reveal-stagger-process">
+        <div class="processo-layout">
+          <div class="processo-body">
+            <div class="section-header reveal">
+              <span class="section-label">Processo</span>
+              <h2>Metodologia em quatro fases</h2>
+              <p class="section-desc">Do diagnóstico à execução, com rigor técnico em cada etapa.</p>
+            </div>
+            <ol class="timeline reveal-stagger reveal-stagger-process">
           <li class="timeline-item card-premium">
             <span class="timeline-num">01</span>
             <div class="timeline-content">
@@ -166,18 +167,31 @@
               <p>Implementação da estratégia com acompanhamento e transparência total.</p>
             </div>
           </li>
-        </ol>
+            </ol>
+          </div>
+          <figure class="processo-visual reveal">
+            <img
+              src="IMG/processo-tech.png"
+              alt=""
+              class="processo-visual-img"
+              width="560"
+              height="700"
+              loading="lazy"
+              decoding="async"
+            >
+          </figure>
+        </div>
       </div>
     </section>
 
     <section id="cases" class="section cases section-alt">
-      <div class="container">
+      <div class="cases-atmosphere" aria-hidden="true"></div>
+      <div class="container section-content">
         <div class="section-header reveal">
           <span class="section-label">Cases</span>
           <h2>Resultados que falam por si</h2>
           <p class="section-desc">Exemplos de aplicação em diferentes perfis e objetivos.</p>
         </div>
-        <div class="cases-layout">
         <div class="cases-grid reveal-stagger">
           <article class="case-card card-premium">
             <span class="case-tag">Indústria</span>
@@ -206,10 +220,6 @@
             </p>
             <span class="case-highlight">Preservação patrimonial</span>
           </article>
-        </div>
-        <figure class="cases-visual reveal">
-          <img src="IMG/cases-detail.png" alt="" width="480" height="640" loading="lazy" decoding="async">
-        </figure>
         </div>
       </div>
     </section>
@@ -241,7 +251,7 @@
     </section>
 
     <section id="contato" class="section contato section-dark">
-      <div class="contato-accent" aria-hidden="true"></div>
+      <div class="contato-atmosphere" aria-hidden="true"></div>
       <div class="container section-content">
         <div class="contato-wrapper reveal">
           <div class="contato-info">
