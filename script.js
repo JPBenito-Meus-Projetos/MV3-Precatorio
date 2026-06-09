@@ -80,6 +80,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
+const PROPOSTA_EMAIL = "joao.benito@mv3.com.br";
+
 const contatoForm = document.getElementById("contato-form");
 const formFeedback = document.getElementById("form-feedback");
 const telefoneInput = document.getElementById("telefone");
@@ -139,9 +141,10 @@ if (processoInput) {
   });
 }
 
-const FORM_EMAIL = "joao.benito@mv3.com.br";
-
 if (contatoForm) {
+  const submitBtn = contatoForm.querySelector('button[type="submit"]');
+  const submitBtnText = submitBtn?.textContent?.trim() || "Enviar proposta";
+
   contatoForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -151,35 +154,56 @@ if (contatoForm) {
       return;
     }
 
-    const submitBtn = contatoForm.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Enviando...";
-
     const data = new FormData(contatoForm);
-    data.append("_subject", "Proposta de Precatório — MNPR Capital");
-    data.append("_template", "table");
-    data.append("_captcha", "false");
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+    }
+    showFormFeedback("Enviando sua proposta...", "success");
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${FORM_EMAIL}`, {
+      const response = await fetch(`https://formsubmit.co/ajax/${PROPOSTA_EMAIL}`, {
         method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "Venda de Precatório — MNPR Capital",
+          _template: "table",
+          _captcha: "false",
+          name: data.get("nome"),
+          email: data.get("email"),
+          telefone: data.get("telefone"),
+          processo: data.get("processo"),
+          valor: data.get("valor"),
+          observacao: data.get("observacao") || "—",
+        }),
       });
 
-      if (!response.ok) throw new Error("Falha no envio");
+      const result = await response.json();
+      const isSuccess = result.success === true || result.success === "true";
 
-      showFormFeedback("Proposta enviada com sucesso para joao.benito@mv3.com.br!", "success");
+      if (!response.ok || !isSuccess) {
+        throw new Error(result.message || "Não foi possível enviar a proposta.");
+      }
+
+      showFormFeedback("Proposta enviada com sucesso! Entraremos em contato em breve.", "success");
       contatoForm.reset();
-    } catch {
-      showFormFeedback(
-        "Não foi possível enviar. Tente novamente ou envie um e-mail para joao.benito@mv3.com.br.",
-        "error"
-      );
+    } catch (error) {
+      const isLocalFile = window.location.protocol === "file:";
+      const message = isLocalFile
+        ? "Para testar o envio, abra o site por um servidor local (ex.: Live Server)."
+        : error.message?.includes("web server")
+          ? "Abra o site por um servidor local para enviar o formulário."
+          : "Não foi possível enviar. Tente novamente em instantes.";
+      showFormFeedback(message, "error");
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtnText;
+      }
     }
   });
 }
