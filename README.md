@@ -75,3 +75,16 @@ Recomendações:
 - Rate limiting (5 envios por IP a cada 15 min)
 - Sanitização HTML nos e-mails
 - Credenciais em variáveis de ambiente
+
+## Priorização interna
+
+Cada proposta recebe uma pontuação com base em **perfil** e **valor** do precatório.
+O resultado aparece no e-mail (assunto, badge e tabela) para triagem da equipe.
+
+Critérios configuráveis em `server/prioridade.js`:
+
+| Prioridade | Pontuação |
+|------------|-----------|
+| Alta | ≥ 50 pts |
+| Média | ≥ 25 pts |
+| Padrão | < 25 pts |

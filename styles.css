@@ -995,6 +995,7 @@ a {
 }
 
 .form-group.is-invalid input,
+.form-group.is-invalid select,
 .form-group.is-invalid textarea {
   border-color: rgba(239, 68, 68, 0.7);
 }
@@ -1004,6 +1005,7 @@ a {
 }
 
 .contato-form input,
+.contato-form select,
 .contato-form textarea {
   width: 100%;
   padding: 0.85rem 1rem;
@@ -1016,8 +1018,23 @@ a {
   transition: border-color var(--transition), background var(--transition);
 }
 
-.contato-form input {
+.contato-form input,
+.contato-form select {
   height: 3rem;
+}
+
+.contato-form select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23c9a227' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.contato-form select option {
+  color: var(--gray-800);
+  background: var(--white);
 }
 
 .contato-form input::placeholder,
@@ -1026,6 +1043,7 @@ a {
 }
 
 .contato-form input:focus,
+.contato-form select:focus,
 .contato-form textarea:focus {
   outline: none;
   border-color: var(--gold);

@@ -4,6 +4,7 @@ import express from "express";
 import nodemailer from "nodemailer";
 import path from "path";
 import { fileURLToPath } from "url";
+import { PERFIS_VALIDOS, avaliarPrioridade } from "./prioridade.js";
 
 dotenv.config();
 
@@ -83,8 +84,16 @@ function truncate(value, max) {
   return String(value ?? "").trim().slice(0, max);
 }
 
-function buildPropostaEmail({ nome, email, telefone, processo, valor, observacao }) {
+const PRIORIDADE_CORES = {
+  alta: { bg: "#fef2f2", border: "#fca5a5", text: "#991b1b", badge: "#dc2626" },
+  media: { bg: "#fffbeb", border: "#fcd34d", text: "#92400e", badge: "#d97706" },
+  padrao: { bg: "#f8fafc", border: "#cbd5e1", text: "#475569", badge: "#64748b" },
+};
+
+function buildPropostaEmail({ nome, email, telefone, perfil, processo, valor, observacao, prioridade }) {
   const rows = [
+    ["Prioridade interna", `${prioridade.label} (${prioridade.score} pts)`],
+    ["Perfil", perfil],
     ["Nome", nome],
     ["E-mail", email],
     ["Telefone", telefone],
@@ -92,6 +101,11 @@ function buildPropostaEmail({ nome, email, telefone, processo, valor, observacao
     ["Valor", valor],
     ["Observação", observacao || "—"],
   ];
+
+  const cores = PRIORIDADE_CORES[prioridade.nivel] ?? PRIORIDADE_CORES.padrao;
+  const motivosHtml = prioridade.motivos
+    .map((m) => `<li style="margin:4px 0;color:${cores.text};font-size:13px;">${escapeHtml(m)}</li>`)
+    .join("");
 
   const tableRows = rows
     .map(
@@ -107,7 +121,12 @@ function buildPropostaEmail({ nome, email, telefone, processo, valor, observacao
     )
     .join("");
 
-  const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
+  const text = [
+    `=== ${prioridade.label.toUpperCase()} (${prioridade.score} pts) ===`,
+    ...prioridade.motivos.map((m) => `• ${m}`),
+    "",
+    ...rows.map(([label, value]) => `${label}: ${value}`),
+  ].join("\n");
 
   const html = `
 <!DOCTYPE html>
@@ -144,7 +163,21 @@ function buildPropostaEmail({ nome, email, telefone, processo, valor, observacao
             </td>
           </tr>
           <tr>
-            <td style="padding:32px 40px 8px;">
+            <td style="padding:24px 40px 0;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:${cores.bg};border:1px solid ${cores.border};border-radius:8px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${cores.badge};">
+                      Triagem interna · ${escapeHtml(prioridade.label)}
+                    </p>
+                    <ul style="margin:0;padding-left:18px;">${motivosHtml}</ul>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 40px 8px;">
               <p style="margin:0 0 22px;font-size:15px;line-height:1.65;color:#64748b;">
                 Uma nova solicitação foi enviada pelo formulário do site:
               </p>
@@ -186,6 +219,7 @@ function validatePropostaPayload(body) {
   const nomeVal = truncate(body?.nome, LIMITS.nome);
   const emailVal = truncate(body?.email, LIMITS.email);
   const telefoneVal = truncate(body?.telefone, LIMITS.telefone);
+  const perfilVal = truncate(body?.perfil, 30);
   const processoVal = truncate(body?.processo, LIMITS.processo);
   const valorVal = truncate(body?.valor, LIMITS.valor);
   const observacaoVal = truncate(body?.observacao, LIMITS.observacao);
@@ -206,6 +240,10 @@ function validatePropostaPayload(body) {
     return { ok: false, message: "Informe um telefone válido com DDD." };
   }
 
+  if (!PERFIS_VALIDOS.includes(perfilVal)) {
+    return { ok: false, message: "Selecione um perfil válido." };
+  }
+
   if (processoDigits.length < 7) {
     return { ok: false, message: "Informe o número do processo." };
   }
@@ -214,15 +252,19 @@ function validatePropostaPayload(body) {
     return { ok: false, message: "Informe o valor do precatório." };
   }
 
+  const prioridade = avaliarPrioridade(perfilVal, valorDigits);
+
   return {
     ok: true,
     dados: {
       nome: nomeVal,
       email: emailVal,
       telefone: telefoneVal,
+      perfil: prioridade.perfilLabel,
       processo: processoVal,
       valor: valorVal,
       observacao: observacaoVal || "—",
+      prioridade,
     },
   };
 }
@@ -284,7 +326,7 @@ app.post("/api/enviar-proposta", async (req, res) => {
       from: `"MNPR Capital" <${SMTP_FROM}>`,
       to: PROPOSTA_DESTINO,
       replyTo: dados.email,
-      subject: "Venda de Precatório — MNPR Capital",
+      subject: `${dados.prioridade.subjectTag}Venda de Precatório — MNPR Capital`,
       text,
       html,
     });

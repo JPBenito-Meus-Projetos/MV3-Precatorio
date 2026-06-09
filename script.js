@@ -145,6 +145,11 @@ function validatePropostaForm(form) {
       message: "Informe um e-mail válido.",
     },
     {
+      name: "perfil",
+      test: (v) => ["empresa", "advogado", "pessoa_fisica", "servidor_publico", "outro"].includes(v),
+      message: "Selecione seu perfil.",
+    },
+    {
       name: "telefone",
       test: (v) => v.replace(/\D/g, "").length >= 10,
       message: "Informe um telefone válido com DDD.",
@@ -217,11 +222,13 @@ if (contatoForm) {
   const submitBtn = contatoForm.querySelector('button[type="submit"]');
   const defaultBtnText = submitBtn?.textContent ?? "Enviar proposta";
 
-  contatoForm.querySelectorAll("input, textarea").forEach((field) => {
-    field.addEventListener("input", () => {
+  contatoForm.querySelectorAll("input, select, textarea").forEach((field) => {
+    const clearError = () => {
       field.closest(".form-group")?.classList.remove("is-invalid");
       hideFormFeedback();
-    });
+    };
+    field.addEventListener("input", clearError);
+    field.addEventListener("change", clearError);
   });
 
   contatoForm.addEventListener("submit", async (e) => {
@@ -233,7 +240,7 @@ if (contatoForm) {
     const validation = validatePropostaForm(contatoForm);
     if (!validation.valid) {
       showFormFeedback(validation.message, "error");
-      contatoForm.querySelector(".form-group.is-invalid input, .form-group.is-invalid textarea")?.focus();
+      contatoForm.querySelector(".form-group.is-invalid input, .form-group.is-invalid select, .form-group.is-invalid textarea")?.focus();
       return;
     }
 
@@ -241,6 +248,7 @@ if (contatoForm) {
     const payload = {
       nome: String(data.get("nome") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
+      perfil: String(data.get("perfil") ?? "").trim(),
       telefone: String(data.get("telefone") ?? "").trim(),
       processo: String(data.get("processo") ?? "").trim(),
       valor: String(data.get("valor") ?? "").trim(),
