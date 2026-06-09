@@ -38,7 +38,6 @@
       <div class="hero-bg" id="hero-bg" aria-hidden="true"></div>
       <div class="container hero-content">
         <p class="hero-eyebrow hero-animate hero-animate-1">Institucional · Precatórios · Capital</p>
-        <h1 class="hero-animate hero-animate-2">MNPR Capital</h1>
         <p class="hero-subtitle hero-animate hero-animate-3">
           A MNPR Capital conecta investidores e cedentes por meio de uma metodologia própria que combina
           inteligência de mercado, análise jurídica, tecnologia e gestão de riscos.
@@ -46,7 +45,6 @@
         <a href="#contato" class="btn btn-gold hero-animate hero-animate-4">Agendar Consultoria</a>
       </div>
       <div class="hero-scroll">
-        <span>Explore</span>
         <div class="hero-scroll-line"></div>
       </div>
     </section>
@@ -256,8 +254,8 @@
         <div class="contato-wrapper reveal">
           <div class="contato-info">
             <span class="section-label section-label-light">Contato</span>
-            <h2>Agende sua consultoria</h2>
-            <p>Nossa equipe está pronta para entender seu caso e apresentar as melhores alternativas.</p>
+            <h2>Quer vender seu precatório?</h2>
+            <p>Preencha o formulário ao lado e nossa equipe analisa seu caso com agilidade e confidencialidade.</p>
             <div class="contato-details">
               <a href="tel:+5511300000000" class="contato-link">
                 <span class="contato-link-label">Telefone</span>
@@ -269,12 +267,51 @@
               </a>
             </div>
           </div>
-          <div class="contato-cta-box">
-            <p>Fale diretamente com um especialista MNPR.</p>
-            <a href="mailto:contato@mnprcapital.com.br?subject=Consultoria%20MNPR%20Capital" class="btn btn-gold btn-block">
-              Agendar Consultoria
-            </a>
-          </div>
+          <form class="contato-form" id="contato-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" autocomplete="name" required>
+              </div>
+              <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <input type="tel" id="telefone" name="telefone" autocomplete="tel" placeholder="(11) 99999-9999" required>
+              </div>
+              <div class="form-group">
+                <label for="valor">Valor</label>
+                <input type="text" id="valor" name="valor" inputmode="decimal" placeholder="R$ 0,00" required>
+              </div>
+            </div>
+            <div class="form-group form-group-processo">
+              <div class="form-label-stack">
+                <label for="processo">Nº do Processo</label>
+                <span class="label-hint">Precatório · formato CNJ</span>
+              </div>
+              <input
+                type="text"
+                id="processo"
+                name="processo"
+                class="form-input-processo"
+                inputmode="numeric"
+                placeholder="0000000-00.0000.0.00.0000"
+                autocomplete="off"
+                spellcheck="false"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="observacao">Observação</label>
+              <textarea id="observacao" name="observacao" rows="4" placeholder="Informações adicionais sobre o precatório"></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold btn-block">Quer vender seu precatório? Entre em contato</button>
+            <p class="form-feedback" id="form-feedback" role="status" aria-live="polite" hidden></p>
+          </form>
         </div>
       </div>
     </section>
