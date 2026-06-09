@@ -21,7 +21,7 @@ const FAIXAS_VALOR = [
 const NIVEIS = [
   { minScore: 50, nivel: "alta", label: "Alta prioridade", subjectTag: "[ALTA PRIORIDADE] " },
   { minScore: 25, nivel: "media", label: "Média prioridade", subjectTag: "[MÉDIA PRIORIDADE] " },
-  { minScore: 0, nivel: "padrao", label: "Prioridade padrão", subjectTag: "" },
+  { minScore: 0, nivel: "baixa", label: "Baixa prioridade", subjectTag: "[BAIXA PRIORIDADE] " },
 ];
 
 export function avaliarPrioridade(perfil, valorDigits) {

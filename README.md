@@ -79,7 +79,7 @@ Recomendações:
 ## Priorização interna
 
 Cada proposta recebe uma pontuação com base em **perfil** e **valor** do precatório.
-O resultado aparece no e-mail (assunto, badge e tabela) para triagem da equipe.
+O resultado aparece no **assunto** do e-mail (ex.: `[ALTA PRIORIDADE]`) e nos cabeçalhos internos (`X-MNPR-*`), sem poluir o corpo ao responder ao cliente.
 
 Critérios configuráveis em `server/prioridade.js`:
 
@@ -87,4 +87,4 @@ Critérios configuráveis em `server/prioridade.js`:
 |------------|-----------|
 | Alta | ≥ 50 pts |
 | Média | ≥ 25 pts |
-| Padrão | < 25 pts |
+| Baixa | < 25 pts |
