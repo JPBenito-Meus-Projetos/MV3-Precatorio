@@ -228,6 +228,14 @@ a {
   width: 100%;
 }
 
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
 /* Hero */
 .hero {
   position: relative;
@@ -1027,11 +1035,6 @@ a {
   box-shadow:
     0 0 0 3px rgba(201, 162, 39, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.contato-form input:invalid:not(:placeholder-shown),
-.contato-form textarea:invalid:not(:placeholder-shown) {
-  border-color: rgba(239, 68, 68, 0.6);
 }
 
 .contato-form textarea {

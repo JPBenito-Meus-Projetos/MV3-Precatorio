@@ -139,8 +139,10 @@ if (processoInput) {
   });
 }
 
+const FORM_RECIPIENT_EMAIL = "joao.benito@mv3.com.br";
+
 if (contatoForm) {
-  contatoForm.addEventListener("submit", (e) => {
+  contatoForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!contatoForm.checkValidity()) {
@@ -149,21 +151,54 @@ if (contatoForm) {
       return;
     }
 
+    const submitBtn = contatoForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.textContent : "";
     const data = new FormData(contatoForm);
-    const body = [
-      `Nome: ${data.get("nome")}`,
-      `E-mail: ${data.get("email")}`,
-      `Telefone: ${data.get("telefone")}`,
-      `Número do Processo: ${data.get("processo")}`,
-      `Valor: ${data.get("valor")}`,
-      `Observação: ${data.get("observacao") || "—"}`,
-    ].join("\n");
 
-    const subject = encodeURIComponent("Venda de Precatório — MNPR Capital");
-    const mailBody = encodeURIComponent(body);
-    window.location.href = `mailto:contato@mnprcapital.com.br?subject=${subject}&body=${mailBody}`;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+    }
 
-    showFormFeedback("Solicitação preparada! Confirme o envio no seu cliente de e-mail.", "success");
-    contatoForm.reset();
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${FORM_RECIPIENT_EMAIL}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          nome: data.get("nome"),
+          email: data.get("email"),
+          telefone: data.get("telefone"),
+          processo: data.get("processo"),
+          valor: data.get("valor"),
+          observacao: data.get("observacao") || "—",
+          _subject: "Nova proposta de precatório — MNPR Capital",
+          _replyto: data.get("email"),
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || result.success === false) {
+        throw new Error(result.message || "Falha no envio");
+      }
+
+      showFormFeedback("Proposta enviada com sucesso! Entraremos em contato em breve.", "success");
+      contatoForm.reset();
+    } catch {
+      showFormFeedback(
+        "Não foi possível enviar a proposta. Tente novamente em instantes.",
+        "error"
+      );
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
   });
 }
