@@ -139,7 +139,7 @@ if (processoInput) {
   });
 }
 
-const FORM_RECIPIENT_EMAIL = "joao.benito@mv3.com.br";
+const FORM_EMAIL = "joao.benito@mv3.com.br";
 
 if (contatoForm) {
   contatoForm.addEventListener("submit", async (e) => {
@@ -152,53 +152,34 @@ if (contatoForm) {
     }
 
     const submitBtn = contatoForm.querySelector('button[type="submit"]');
-    const originalText = submitBtn ? submitBtn.textContent : "";
-    const data = new FormData(contatoForm);
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando...";
 
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Enviando...";
-    }
+    const data = new FormData(contatoForm);
+    data.append("_subject", "Proposta de Precatório — MNPR Capital");
+    data.append("_template", "table");
+    data.append("_captcha", "false");
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${FORM_RECIPIENT_EMAIL}`, {
+      const response = await fetch(`https://formsubmit.co/ajax/${FORM_EMAIL}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          nome: data.get("nome"),
-          email: data.get("email"),
-          telefone: data.get("telefone"),
-          processo: data.get("processo"),
-          valor: data.get("valor"),
-          observacao: data.get("observacao") || "—",
-          _subject: "Nova proposta de precatório — MNPR Capital",
-          _replyto: data.get("email"),
-          _template: "table",
-          _captcha: "false",
-        }),
+        body: data,
+        headers: { Accept: "application/json" },
       });
 
-      const result = await response.json();
+      if (!response.ok) throw new Error("Falha no envio");
 
-      if (!response.ok || result.success === false) {
-        throw new Error(result.message || "Falha no envio");
-      }
-
-      showFormFeedback("Proposta enviada com sucesso! Entraremos em contato em breve.", "success");
+      showFormFeedback("Proposta enviada com sucesso para joao.benito@mv3.com.br!", "success");
       contatoForm.reset();
     } catch {
       showFormFeedback(
-        "Não foi possível enviar a proposta. Tente novamente em instantes.",
+        "Não foi possível enviar. Tente novamente ou envie um e-mail para joao.benito@mv3.com.br.",
         "error"
       );
     } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-      }
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
     }
   });
 }
