@@ -227,6 +227,9 @@ if (contatoForm) {
   contatoForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const honeypot = contatoForm.elements.website?.value?.trim();
+    if (honeypot) return;
+
     const validation = validatePropostaForm(contatoForm);
     if (!validation.valid) {
       showFormFeedback(validation.message, "error");
@@ -236,12 +239,13 @@ if (contatoForm) {
 
     const data = new FormData(contatoForm);
     const payload = {
-      nome: data.get("nome"),
-      email: data.get("email"),
-      telefone: data.get("telefone"),
-      processo: data.get("processo"),
-      valor: data.get("valor"),
-      observacao: data.get("observacao") || "",
+      nome: String(data.get("nome") ?? "").trim(),
+      email: String(data.get("email") ?? "").trim(),
+      telefone: String(data.get("telefone") ?? "").trim(),
+      processo: String(data.get("processo") ?? "").trim(),
+      valor: String(data.get("valor") ?? "").trim(),
+      observacao: String(data.get("observacao") ?? "").trim(),
+      website: "",
     };
 
     if (submitBtn) {
