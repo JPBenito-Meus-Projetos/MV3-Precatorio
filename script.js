@@ -80,8 +80,6 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
-const PROPOSTA_EMAIL = "joao.benito@mv3.com.br";
-
 const contatoForm = document.getElementById("contato-form");
 const formFeedback = document.getElementById("form-feedback");
 const telefoneInput = document.getElementById("telefone");
@@ -103,11 +101,85 @@ function formatValor(value) {
   return number.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-function showFormFeedback(message, type) {
+let formFeedbackTimeout;
+
+function hideFormFeedback() {
   if (!formFeedback) return;
+  formFeedback.hidden = true;
+  formFeedback.textContent = "";
+  formFeedback.className = "form-feedback";
+}
+
+function showFormFeedback(message, type, autoHideMs = type === "success" ? 5000 : 6000) {
+  if (!formFeedback) return;
+
+  if (formFeedbackTimeout) {
+    clearTimeout(formFeedbackTimeout);
+  }
+
   formFeedback.textContent = message;
   formFeedback.hidden = false;
   formFeedback.className = `form-feedback is-${type}`;
+
+  if (autoHideMs > 0) {
+    formFeedbackTimeout = setTimeout(hideFormFeedback, autoHideMs);
+  }
+}
+
+function clearFormErrors(form) {
+  form.querySelectorAll(".form-group.is-invalid").forEach((group) => {
+    group.classList.remove("is-invalid");
+  });
+}
+
+function validatePropostaForm(form) {
+  const rules = [
+    {
+      name: "nome",
+      test: (v) => v.trim().length >= 2,
+      message: "Informe seu nome completo.",
+    },
+    {
+      name: "email",
+      test: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+      message: "Informe um e-mail válido.",
+    },
+    {
+      name: "telefone",
+      test: (v) => v.replace(/\D/g, "").length >= 10,
+      message: "Informe um telefone válido com DDD.",
+    },
+    {
+      name: "processo",
+      test: (v) => v.replace(/\D/g, "").length >= 7,
+      message: "Informe o número do processo.",
+    },
+    {
+      name: "valor",
+      test: (v) => {
+        const digits = v.replace(/\D/g, "");
+        return digits.length > 0 && Number(digits) > 0;
+      },
+      message: "Informe o valor do precatório.",
+    },
+  ];
+
+  clearFormErrors(form);
+
+  for (const rule of rules) {
+    const field = form.elements[rule.name];
+    if (!field) continue;
+
+    const isValid = rule.test(field.value);
+    const group = field.closest(".form-group");
+
+    if (!isValid) {
+      group?.classList.add("is-invalid");
+      return { valid: false, message: rule.message };
+    }
+  }
+
+  return { valid: true };
 }
 
 if (telefoneInput) {
@@ -143,66 +215,65 @@ if (processoInput) {
 
 if (contatoForm) {
   const submitBtn = contatoForm.querySelector('button[type="submit"]');
-  const submitBtnText = submitBtn?.textContent?.trim() || "Enviar proposta";
+  const defaultBtnText = submitBtn?.textContent ?? "Enviar proposta";
+
+  contatoForm.querySelectorAll("input, textarea").forEach((field) => {
+    field.addEventListener("input", () => {
+      field.closest(".form-group")?.classList.remove("is-invalid");
+      hideFormFeedback();
+    });
+  });
 
   contatoForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if (!contatoForm.checkValidity()) {
-      contatoForm.reportValidity();
-      showFormFeedback("Preencha todos os campos obrigatórios.", "error");
+    const validation = validatePropostaForm(contatoForm);
+    if (!validation.valid) {
+      showFormFeedback(validation.message, "error");
+      contatoForm.querySelector(".form-group.is-invalid input, .form-group.is-invalid textarea")?.focus();
       return;
     }
 
     const data = new FormData(contatoForm);
+    const payload = {
+      nome: data.get("nome"),
+      email: data.get("email"),
+      telefone: data.get("telefone"),
+      processo: data.get("processo"),
+      valor: data.get("valor"),
+      observacao: data.get("observacao") || "",
+    };
 
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = "Enviando...";
     }
-    showFormFeedback("Enviando sua proposta...", "success");
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${PROPOSTA_EMAIL}`, {
+      const response = await fetch("/api/enviar-proposta", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          _subject: "Venda de Precatório — MNPR Capital",
-          _template: "table",
-          _captcha: "false",
-          name: data.get("nome"),
-          email: data.get("email"),
-          telefone: data.get("telefone"),
-          processo: data.get("processo"),
-          valor: data.get("valor"),
-          observacao: data.get("observacao") || "—",
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
-      const isSuccess = result.success === true || result.success === "true";
 
-      if (!response.ok || !isSuccess) {
-        throw new Error(result.message || "Não foi possível enviar a proposta.");
+      if (!response.ok || !result.ok) {
+        showFormFeedback(result.message || "Não foi possível enviar a proposta.", "error");
+        return;
       }
 
-      showFormFeedback("Proposta enviada com sucesso! Entraremos em contato em breve.", "success");
+      showFormFeedback(result.message, "success");
       contatoForm.reset();
-    } catch (error) {
-      const isLocalFile = window.location.protocol === "file:";
-      const message = isLocalFile
-        ? "Para testar o envio, abra o site por um servidor local (ex.: Live Server)."
-        : error.message?.includes("web server")
-          ? "Abra o site por um servidor local para enviar o formulário."
-          : "Não foi possível enviar. Tente novamente em instantes.";
-      showFormFeedback(message, "error");
+    } catch {
+      showFormFeedback(
+        "Erro de conexão. Inicie o servidor com npm start e acesse http://localhost:3000",
+        "error"
+      );
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = submitBtnText;
+        submitBtn.textContent = defaultBtnText;
       }
     }
   });
