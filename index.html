@@ -261,16 +261,27 @@
             <p>Preencha o formulário ao lado e nossa equipe analisa seu caso com agilidade e confidencialidade.</p>
             <div class="contato-details">
               <a href="tel:+5511300000000" class="contato-link">
-                <span class="contato-link-label">Telefone</span>
-                <span>(11) 3000-0000</span>
+                <span class="contato-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                </span>
+                <span class="contato-link-body">
+                  <span class="contato-link-label">Telefone</span>
+                  <span class="contato-link-value">(11) 3000-0000</span>
+                </span>
               </a>
               <a href="mailto:joao.benito@mv3.com.br" class="contato-link">
-                <span class="contato-link-label">E-mail</span>
-                <span>joao.benito@mv3.com.br</span>
+                <span class="contato-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+                </span>
+                <span class="contato-link-body">
+                  <span class="contato-link-label">E-mail</span>
+                  <span class="contato-link-value">joao.benito@mv3.com.br</span>
+                </span>
               </a>
             </div>
           </div>
           <form class="contato-form" id="contato-form" novalidate>
+            <p class="contato-form-eyebrow">Sua proposta</p>
             <div class="honeypot" aria-hidden="true">
               <label for="website">Website</label>
               <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
@@ -307,10 +318,7 @@
               </div>
             </div>
             <div class="form-group form-group-processo">
-              <div class="form-label-stack">
-                <label for="processo">Nº do Processo</label>
-                <span class="label-hint">Precatório · ex.: 0000000-00.0000.0.00.0000</span>
-              </div>
+              <label for="processo">Nº do Processo <span class="label-hint">· formato CNJ</span></label>
               <input
                 type="text"
                 id="processo"
