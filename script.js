@@ -51,21 +51,25 @@ function initHeroEntrance() {
 initHeroEntrance();
 
 const revealElements = document.querySelectorAll(
-  ".reveal, .reveal-stagger, .processo-visual"
+  ".reveal, .reveal-stagger, .reveal-img"
 );
 
-const revealObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-visible");
-      revealObserver.unobserve(entry.target);
-    });
-  },
-  { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
-);
+if (prefersReducedMotion) {
+  revealElements.forEach((el) => el.classList.add("is-visible"));
+} else {
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.08, rootMargin: "0px 0px -5% 0px" }
+  );
 
-revealElements.forEach((el) => revealObserver.observe(el));
+  revealElements.forEach((el) => revealObserver.observe(el));
+}
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (e) => {

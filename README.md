@@ -62,7 +62,9 @@ Recomendações:
 ├── styles.css      # Estilos
 ├── script.js       # Interações e formulário
 ├── server/
-│   └── index.js    # API de envio de e-mail
+│   ├── index.js          # API de envio de e-mail
+│   ├── email-proposta.js # Template HTML do e-mail
+│   └── prioridade.js     # Pontuação interna
 ├── IMG/            # Imagens do site
 ├── .env.example    # Modelo de variáveis
 └── start.bat       # Atalho Windows
