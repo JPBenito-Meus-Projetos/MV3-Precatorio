@@ -188,7 +188,43 @@ function validatePropostaForm(form) {
     }
   }
 
+  const perfilField = form.elements.perfil;
+  const perfilOutroField = form.elements.perfil_outro;
+  const perfilOutroGroup = document.getElementById("perfil-outro-group");
+
+  if (perfilField?.value === "outro") {
+    const outroVal = String(perfilOutroField?.value ?? "").trim();
+    if (outroVal.length < 2) {
+      perfilOutroGroup?.classList.add("is-invalid");
+      return { valid: false, message: "Informe seu perfil." };
+    }
+  }
+
   return { valid: true };
+}
+
+const perfilSelect = document.getElementById("perfil");
+const perfilOutroGroup = document.getElementById("perfil-outro-group");
+const perfilOutroInput = document.getElementById("perfil_outro");
+
+function togglePerfilOutro() {
+  if (!perfilSelect || !perfilOutroGroup || !perfilOutroInput) return;
+
+  const isOutro = perfilSelect.value === "outro";
+  perfilOutroGroup.hidden = !isOutro;
+  perfilOutroInput.required = isOutro;
+
+  if (!isOutro) {
+    perfilOutroInput.value = "";
+    perfilOutroGroup.classList.remove("is-invalid");
+  } else {
+    requestAnimationFrame(() => perfilOutroInput.focus());
+  }
+}
+
+if (perfilSelect) {
+  perfilSelect.addEventListener("change", togglePerfilOutro);
+  togglePerfilOutro();
 }
 
 if (telefoneInput) {
@@ -249,10 +285,12 @@ if (contatoForm) {
     }
 
     const data = new FormData(contatoForm);
+    const perfil = String(data.get("perfil") ?? "").trim();
     const payload = {
       nome: String(data.get("nome") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
-      perfil: String(data.get("perfil") ?? "").trim(),
+      perfil,
+      perfil_outro: perfil === "outro" ? String(data.get("perfil_outro") ?? "").trim() : "",
       telefone: String(data.get("telefone") ?? "").trim(),
       processo: String(data.get("processo") ?? "").trim(),
       valor: String(data.get("valor") ?? "").trim(),
@@ -281,6 +319,7 @@ if (contatoForm) {
 
       showFormFeedback(result.message, "success");
       contatoForm.reset();
+      togglePerfilOutro();
     } catch {
       showFormFeedback(
         "Erro de conexão. Inicie o servidor com npm start e acesse http://localhost:3000",

@@ -24,9 +24,13 @@ const NIVEIS = [
   { minScore: 0, nivel: "baixa", label: "Baixa prioridade", subjectTag: "[BAIXA PRIORIDADE] " },
 ];
 
-export function avaliarPrioridade(perfil, valorDigits) {
+export function avaliarPrioridade(perfil, valorDigits, perfilCustomizado = "") {
   const perfilInfo = PERFIS[perfil] ?? PERFIS.outro;
   const valorCentavos = Number(valorDigits) || 0;
+  const perfilLabel =
+    perfil === "outro" && perfilCustomizado
+      ? `Outro — ${perfilCustomizado}`
+      : perfilInfo.label;
 
   const faixaValor = FAIXAS_VALOR.find((f) => valorCentavos >= f.minCentavos) ?? FAIXAS_VALOR.at(-1);
   const score = perfilInfo.pontos + faixaValor.pontos;
@@ -37,9 +41,9 @@ export function avaliarPrioridade(perfil, valorDigits) {
     label: nivelInfo.label,
     score,
     subjectTag: nivelInfo.subjectTag,
-    perfilLabel: perfilInfo.label,
+    perfilLabel,
     motivos: [
-      `Perfil "${perfilInfo.label}" (+${perfilInfo.pontos} pts)`,
+      `Perfil "${perfilLabel}" (+${perfilInfo.pontos} pts)`,
       `Valor ${faixaValor.label} (+${faixaValor.pontos} pts)`,
     ],
   };

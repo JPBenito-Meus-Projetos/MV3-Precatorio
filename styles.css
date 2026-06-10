@@ -1177,6 +1177,25 @@ a {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.form-group-perfil-outro[hidden] {
+  display: none;
+}
+
+.form-group-perfil-outro:not([hidden]) {
+  animation: fadeInUp 0.35s var(--ease-out-expo);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .form-group-processo .label-hint {
   font-size: 0.62rem;
   font-weight: 500;

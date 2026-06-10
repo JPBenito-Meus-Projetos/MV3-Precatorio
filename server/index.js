@@ -88,6 +88,7 @@ function validatePropostaPayload(body) {
   const emailVal = truncate(body?.email, LIMITS.email);
   const telefoneVal = truncate(body?.telefone, LIMITS.telefone);
   const perfilVal = truncate(body?.perfil, 30);
+  const perfilOutroVal = truncate(body?.perfil_outro, 80);
   const processoVal = truncate(body?.processo, LIMITS.processo);
   const valorVal = truncate(body?.valor, LIMITS.valor);
   const observacaoVal = truncate(body?.observacao, LIMITS.observacao);
@@ -112,6 +113,10 @@ function validatePropostaPayload(body) {
     return { ok: false, message: "Selecione um perfil válido." };
   }
 
+  if (perfilVal === "outro" && perfilOutroVal.length < 2) {
+    return { ok: false, message: "Informe seu perfil." };
+  }
+
   if (processoDigits.length < 7) {
     return { ok: false, message: "Informe o número do processo." };
   }
@@ -120,7 +125,11 @@ function validatePropostaPayload(body) {
     return { ok: false, message: "Informe o valor do precatório." };
   }
 
-  const prioridade = avaliarPrioridade(perfilVal, valorDigits);
+  const prioridade = avaliarPrioridade(
+    perfilVal,
+    valorDigits,
+    perfilVal === "outro" ? perfilOutroVal : ""
+  );
 
   return {
     ok: true,
