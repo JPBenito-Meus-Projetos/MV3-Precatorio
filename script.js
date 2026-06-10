@@ -15,19 +15,54 @@ function onScroll() {
 window.addEventListener("scroll", onScroll, { passive: true });
 onScroll();
 
+function closeMobileMenu() {
+  if (!nav || !menuToggle) return;
+  nav.classList.remove("open");
+  menuToggle.classList.remove("active");
+  menuToggle.setAttribute("aria-expanded", "false");
+  menuToggle.focus();
+}
+
+function openMobileMenu() {
+  if (!nav || !menuToggle) return;
+  nav.classList.add("open");
+  menuToggle.classList.add("active");
+  menuToggle.setAttribute("aria-expanded", "true");
+  nav.querySelector("a")?.focus();
+}
+
 if (menuToggle && nav) {
   menuToggle.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle("open");
-    menuToggle.classList.toggle("active", isOpen);
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    if (nav.classList.contains("open")) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
   });
 
   nav.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("open");
-      menuToggle.classList.remove("active");
-      menuToggle.setAttribute("aria-expanded", "false");
-    });
+    link.addEventListener("click", closeMobileMenu);
+  });
+
+  nav.addEventListener("keydown", (e) => {
+    if (!nav.classList.contains("open") || e.key !== "Tab") return;
+    const focusable = [...nav.querySelectorAll("a[href]")];
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && nav.classList.contains("open")) {
+      closeMobileMenu();
+    }
   });
 }
 
@@ -130,9 +165,42 @@ function showFormFeedback(message, type, autoHideMs = type === "success" ? 5000 
   }
 }
 
+function getFieldErrorEl(field) {
+  if (!field?.name && !field?.id) return null;
+  const id = `${field.name || field.id}-error`;
+  let el = document.getElementById(id);
+  if (!el && field.parentElement) {
+    el = document.createElement("span");
+    el.id = id;
+    el.className = "field-error";
+    el.setAttribute("role", "alert");
+    field.parentElement.appendChild(el);
+    const describedBy = field.getAttribute("aria-describedby");
+    field.setAttribute("aria-describedby", describedBy ? `${describedBy} ${id}` : id);
+  }
+  return el;
+}
+
+function setFieldInvalid(field, group, message) {
+  field?.setAttribute("aria-invalid", "true");
+  group?.classList.add("is-invalid");
+  const err = getFieldErrorEl(field);
+  if (err) {
+    err.textContent = message;
+    err.hidden = false;
+  }
+}
+
 function clearFormErrors(form) {
   form.querySelectorAll(".form-group.is-invalid").forEach((group) => {
     group.classList.remove("is-invalid");
+  });
+  form.querySelectorAll("[aria-invalid]").forEach((field) => {
+    field.removeAttribute("aria-invalid");
+  });
+  form.querySelectorAll(".field-error").forEach((err) => {
+    err.textContent = "";
+    err.hidden = true;
   });
 }
 
@@ -183,8 +251,8 @@ function validatePropostaForm(form) {
     const group = field.closest(".form-group");
 
     if (!isValid) {
-      group?.classList.add("is-invalid");
-      return { valid: false, message: rule.message };
+      setFieldInvalid(field, group, rule.message);
+      return { valid: false, message: rule.message, field };
     }
   }
 
@@ -195,9 +263,16 @@ function validatePropostaForm(form) {
   if (perfilField?.value === "outro") {
     const outroVal = String(perfilOutroField?.value ?? "").trim();
     if (outroVal.length < 2) {
-      perfilOutroGroup?.classList.add("is-invalid");
-      return { valid: false, message: "Informe seu perfil." };
+      setFieldInvalid(perfilOutroField, perfilOutroGroup, "Informe seu perfil.");
+      return { valid: false, message: "Informe seu perfil.", field: perfilOutroField };
     }
+  }
+
+  const consentField = form.elements.consent;
+  if (!consentField?.checked) {
+    const consentGroup = consentField?.closest(".form-group");
+    setFieldInvalid(consentField, consentGroup, "Aceite a Política de Privacidade para continuar.");
+    return { valid: false, message: "É necessário aceitar a Política de Privacidade.", field: consentField };
   }
 
   return { valid: true };
@@ -264,7 +339,14 @@ if (contatoForm) {
 
   contatoForm.querySelectorAll("input, select, textarea").forEach((field) => {
     const clearError = () => {
-      field.closest(".form-group")?.classList.remove("is-invalid");
+      const group = field.closest(".form-group");
+      group?.classList.remove("is-invalid");
+      field.removeAttribute("aria-invalid");
+      const err = group?.querySelector(".field-error");
+      if (err) {
+        err.textContent = "";
+        err.hidden = true;
+      }
       hideFormFeedback();
     };
     field.addEventListener("input", clearError);
@@ -280,7 +362,7 @@ if (contatoForm) {
     const validation = validatePropostaForm(contatoForm);
     if (!validation.valid) {
       showFormFeedback(validation.message, "error");
-      contatoForm.querySelector(".form-group.is-invalid input, .form-group.is-invalid select, .form-group.is-invalid textarea")?.focus();
+      validation.field?.focus();
       return;
     }
 
@@ -295,6 +377,7 @@ if (contatoForm) {
       processo: String(data.get("processo") ?? "").trim(),
       valor: String(data.get("valor") ?? "").trim(),
       observacao: String(data.get("observacao") ?? "").trim(),
+      consent: contatoForm.elements.consent?.checked === true,
       website: "",
     };
 

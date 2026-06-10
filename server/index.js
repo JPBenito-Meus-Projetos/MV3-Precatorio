@@ -1,10 +1,18 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import helmet from "helmet";
 import nodemailer from "nodemailer";
 import path from "path";
 import { fileURLToPath } from "url";
 import { buildPropostaEmail } from "./email-proposta.js";
+import {
+  ROOT,
+  buildRobots,
+  buildSitemap,
+  getSiteBase,
+  loadPage,
+} from "./pages.js";
 import { PERFIS_VALIDOS, avaliarPrioridade } from "./prioridade.js";
 
 dotenv.config();
@@ -21,6 +29,9 @@ const SMTP_PASS = process.env.SMTP_PASS;
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER;
 const PROPOSTA_DESTINO = process.env.PROPOSTA_DESTINO || "joao.benito@mv3.com.br";
 const EMAIL_LOGO_URL = process.env.EMAIL_LOGO_URL || "";
+const SITE_URL = process.env.SITE_URL || "";
+const CONTACT_PHONE = process.env.CONTACT_PHONE || "(11) 3000-0000";
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || PROPOSTA_DESTINO;
 
 const LIMITS = {
   nome: 120,
@@ -36,6 +47,11 @@ const RATE_MAX_REQUESTS = 5;
 const rateLimitStore = new Map();
 
 let mailTransporter = null;
+
+function pageVars(req) {
+  const siteBase = getSiteBase(req, SITE_URL);
+  return { siteBase, contactPhone: CONTACT_PHONE, contactEmail: CONTACT_EMAIL };
+}
 
 function getClientIp(req) {
   return (
@@ -78,10 +94,19 @@ function truncate(value, max) {
   return String(value ?? "").trim().slice(0, max);
 }
 
+function hasConsent(body) {
+  const value = body?.consent;
+  return value === true || value === "true" || value === "1" || value === 1;
+}
+
 function validatePropostaPayload(body) {
   const { website } = body ?? {};
   if (website?.trim()) {
     return { ok: false, silent: true };
+  }
+
+  if (!hasConsent(body)) {
+    return { ok: false, message: "É necessário aceitar a Política de Privacidade." };
   }
 
   const nomeVal = truncate(body?.nome, LIMITS.nome);
@@ -147,6 +172,36 @@ function validatePropostaPayload(body) {
 }
 
 app.disable("x-powered-by");
+
+if (IS_PROD) {
+  app.use((req, res, next) => {
+    const proto = req.headers["x-forwarded-proto"];
+    if (proto && proto !== "https") {
+      return res.redirect(301, `https://${req.headers.host}${req.originalUrl}`);
+    }
+    next();
+  });
+}
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+        imgSrc: ["'self'", "data:", "blob:"],
+        scriptSrc: ["'self'"],
+        connectSrc: ["'self'"],
+        frameAncestors: ["'self'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+      },
+    },
+    crossOriginResourcePolicy: { policy: "same-origin" },
+  })
+);
+
 app.use(
   express.json({
     limit: "32kb",
@@ -158,13 +213,26 @@ app.use(
     methods: ["GET", "POST"],
   })
 );
-app.use((req, res, next) => {
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-Frame-Options", "SAMEORIGIN");
-  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  next();
+
+app.get(["/", "/index.html"], (req, res) => {
+  res.type("html").send(loadPage("index.html", pageVars(req)));
 });
-app.use(express.static(path.join(__dirname, "..")));
+
+app.get("/privacidade.html", (req, res) => {
+  res.type("html").send(loadPage("privacidade.html", pageVars(req)));
+});
+
+app.get("/robots.txt", (req, res) => {
+  const { siteBase } = pageVars(req);
+  res.type("text/plain").send(buildRobots(siteBase));
+});
+
+app.get("/sitemap.xml", (req, res) => {
+  const { siteBase } = pageVars(req);
+  res.type("application/xml").send(buildSitemap(siteBase));
+});
+
+app.use(express.static(ROOT, { index: false, dotfiles: "ignore" }));
 
 app.post("/api/enviar-proposta", async (req, res) => {
   const clientIp = getClientIp(req);
@@ -226,6 +294,10 @@ app.post("/api/enviar-proposta", async (req, res) => {
 
     res.status(500).json({ ok: false, message });
   }
+});
+
+app.use((req, res) => {
+  res.status(404).type("text/plain").send("Página não encontrada.");
 });
 
 app.listen(PORT, () => {

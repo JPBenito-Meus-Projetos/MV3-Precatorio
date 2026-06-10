@@ -1272,6 +1272,119 @@ a {
   border: 1px solid rgba(239, 68, 68, 0.35);
 }
 
+.field-error {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #fca5a5;
+  min-height: 0;
+}
+
+.field-error:empty,
+.field-error[hidden] {
+  display: none;
+}
+
+.form-group-consent {
+  margin-top: 0.25rem;
+}
+
+.consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--gray-400);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.consent-label input[type="checkbox"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.consent-label a {
+  color: var(--gold-light);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.consent-label a:hover {
+  color: var(--gold);
+}
+
+.form-group-consent.is-invalid .consent-label {
+  color: #fca5a5;
+}
+
+.cases-disclaimer {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--gray-600);
+  font-style: italic;
+}
+
+/* Página legal */
+.legal-page {
+  padding: 7rem 0 4rem;
+  background: var(--gray-100);
+  min-height: 60vh;
+}
+
+.legal-content {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 2.5rem 2.75rem;
+  box-shadow: var(--shadow-premium);
+}
+
+.legal-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 4vw, 2.35rem);
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+
+.legal-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--navy);
+  margin: 1.75rem 0 0.65rem;
+}
+
+.legal-content p {
+  color: var(--gray-600);
+  line-height: 1.7;
+  margin-bottom: 0.85rem;
+}
+
+.legal-content a {
+  color: var(--gold-dark);
+  text-decoration: underline;
+}
+
+.legal-updated {
+  font-size: 0.85rem;
+  color: var(--gray-400);
+  margin-bottom: 1.5rem !important;
+}
+
+.legal-back {
+  margin-top: 2rem !important;
+}
+
 /* Footer */
 .footer {
   background: radial-gradient(circle at 50% 100%, #112240 0%, #0a1628 100%);

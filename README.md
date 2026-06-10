@@ -25,13 +25,16 @@ SMTP_PASS=sua_senha_ou_senha_de_app
 SMTP_FROM=seu_email@mv3.com.br
 PROPOSTA_DESTINO=destino@mv3.com.br
 PORT=3000
+NODE_ENV=development
+
+SITE_URL=https://www.seudominio.com.br
+CONTACT_PHONE=(11) 99999-9999
+CONTACT_EMAIL=contato@empresa.com.br
 ```
 
 > O arquivo `.env` **não** é enviado ao GitHub (está no `.gitignore`).
 
 ## Executar localmente
-
-**Windows (PowerShell):**
 
 ```powershell
 $env:Path = "C:\Program Files\nodejs;" + $env:Path
@@ -44,46 +47,81 @@ Acesse: **http://localhost:3000**
 
 > O formulário só funciona com o servidor rodando. Não abra o `index.html` diretamente.
 
+## Otimizar imagens (recomendado)
+
+```bash
+npm run optimize-images
+```
+
+Comprime PNGs grandes em `IMG/` (hero, cases, processo, textura).
+
 ## Produção
 
-Defina `NODE_ENV=production` no servidor para mensagens de erro genéricas.
+Defina no servidor:
+
+```env
+NODE_ENV=production
+SITE_URL=https://www.seudominio.com.br
+```
 
 Recomendações:
 
 - Hospedar em Render, Railway, VPS ou similar
-- Usar HTTPS
+- HTTPS com proxy reverso (redirecionamento automático em produção)
 - Manter `.env` apenas no servidor
 - Habilitar SMTP AUTH na conta Microsoft 365
 
 ## Estrutura
 
 ```
-├── index.html      # Página principal
-├── styles.css      # Estilos
-├── script.js       # Interações e formulário
+├── index.html          # Página principal
+├── privacidade.html    # Política de Privacidade (LGPD)
+├── styles.css          # Estilos
+├── script.js           # Interações e formulário
 ├── server/
-│   ├── index.js          # API de envio de e-mail
+│   ├── index.js          # API, segurança e páginas dinâmicas
+│   ├── pages.js          # Injeção de URL/contato, sitemap, robots
 │   ├── email-proposta.js # Template HTML do e-mail
 │   └── prioridade.js     # Pontuação interna
-├── IMG/            # Imagens do site
-├── .env.example    # Modelo de variáveis
-└── start.bat       # Atalho Windows
+├── IMG/                # Imagens do site
+├── scripts/            # Utilitários (compressão de imagens)
+├── .env.example
+└── start.bat
 ```
 
-## Segurança
+## Boas práticas implementadas
 
-- Validação no front-end e back-end
-- Campo honeypot anti-spam
-- Rate limiting (5 envios por IP a cada 15 min)
-- Sanitização HTML nos e-mails
-- Credenciais em variáveis de ambiente
+### SEO
+- Favicon, canonical, Open Graph e Twitter Card
+- `robots.txt` e `sitemap.xml` dinâmicos
+- `meta description` e `theme-color`
+
+### Acessibilidade
+- Skip link, landmarks, `aria-expanded`, `aria-live`
+- `aria-invalid` e mensagens de erro por campo
+- Menu mobile com foco e tecla Esc
+- `prefers-reduced-motion`
+
+### LGPD
+- Política de Privacidade (`/privacidade.html`)
+- Checkbox de consentimento obrigatório (front + back)
+
+### Segurança
+- Helmet + CSP
+- Rate limiting, honeypot, validação dupla
+- HTTPS forçado em produção
+- Credenciais em `.env`
+- Arquivos ocultos não servidos (`dotfiles: ignore`)
+
+### Performance
+- `loading="lazy"` em imagens
+- Script `npm run optimize-images` para PNGs
 
 ## Priorização interna
 
-Cada proposta recebe uma pontuação com base em **perfil** e **valor** do precatório.
-O resultado aparece no **assunto** do e-mail (ex.: `[ALTA PRIORIDADE]`) e nos cabeçalhos internos (`X-MNPR-*`), sem poluir o corpo ao responder ao cliente.
+Cada proposta recebe pontuação por **perfil** e **valor**. O resultado aparece no **assunto** do e-mail e nos cabeçalhos `X-MNPR-*`.
 
-Critérios configuráveis em `server/prioridade.js`:
+Critérios em `server/prioridade.js`:
 
 | Prioridade | Pontuação |
 |------------|-----------|
