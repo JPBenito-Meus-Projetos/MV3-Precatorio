@@ -47,14 +47,6 @@ Acesse: **http://localhost:3000**
 
 > O formulário só funciona com o servidor rodando. Não abra o `index.html` diretamente.
 
-## Otimizar imagens (recomendado)
-
-```bash
-npm run optimize-images
-```
-
-Comprime PNGs grandes em `IMG/` (hero, cases, processo, textura).
-
 ## Produção
 
 Defina no servidor:
@@ -84,7 +76,6 @@ Recomendações:
 │   ├── email-proposta.js # Template HTML do e-mail
 │   └── prioridade.js     # Pontuação interna
 ├── IMG/                # Imagens do site
-├── scripts/            # Utilitários (compressão de imagens)
 ├── .env.example
 └── start.bat
 ```
@@ -115,7 +106,7 @@ Recomendações:
 
 ### Performance
 - `loading="lazy"` em imagens
-- Script `npm run optimize-images` para PNGs
+- Logo com `srcset` para telas Retina
 
 ## Priorização interna
 

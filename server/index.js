@@ -1,5 +1,6 @@
 import cors from "cors";
 import dotenv from "dotenv";
+import { existsSync } from "fs";
 import express from "express";
 import helmet from "helmet";
 import nodemailer from "nodemailer";
@@ -45,8 +46,34 @@ const LIMITS = {
 const RATE_WINDOW_MS = 15 * 60 * 1000;
 const RATE_MAX_REQUESTS = 5;
 const rateLimitStore = new Map();
+const EMAIL_LOGO_CID = "mnpr-logo";
+const EMAIL_LOGO_PATH = path.join(ROOT, "IMG", "logo-header.png");
 
 let mailTransporter = null;
+
+function resolveEmailLogo(req) {
+  const siteUrl = getSiteBase(req, SITE_URL);
+
+  if (EMAIL_LOGO_URL) {
+    return { logoUrl: EMAIL_LOGO_URL, siteUrl, attachments: [] };
+  }
+
+  if (!existsSync(EMAIL_LOGO_PATH)) {
+    return { siteUrl, attachments: [] };
+  }
+
+  return {
+    logoCid: EMAIL_LOGO_CID,
+    siteUrl,
+    attachments: [
+      {
+        filename: "logo-header.png",
+        path: EMAIL_LOGO_PATH,
+        cid: EMAIL_LOGO_CID,
+      },
+    ],
+  };
+}
 
 function pageVars(req) {
   const siteBase = getSiteBase(req, SITE_URL);
@@ -264,7 +291,8 @@ app.post("/api/enviar-proposta", async (req, res) => {
   }
 
   const { dados } = validation;
-  const { text, html } = buildPropostaEmail(dados, { logoUrl: EMAIL_LOGO_URL });
+  const logoOptions = resolveEmailLogo(req);
+  const { text, html } = buildPropostaEmail(dados, logoOptions);
 
   try {
     await getMailTransporter().sendMail({
@@ -279,6 +307,7 @@ app.post("/api/enviar-proposta", async (req, res) => {
       },
       text,
       html,
+      attachments: logoOptions.attachments,
     });
 
     res.json({

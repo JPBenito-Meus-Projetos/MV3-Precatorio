@@ -3,8 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server/index.js",
-    "optimize-images": "node scripts/compress-images.mjs"
+    "start": "node server/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -12,8 +11,5 @@
     "express": "^4.21.2",
     "helmet": "^8.0.0",
     "nodemailer": "^6.10.0"
-  },
-  "devDependencies": {
-    "sharp": "^0.33.5"
   }
 }

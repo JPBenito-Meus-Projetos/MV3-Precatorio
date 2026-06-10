@@ -6,16 +6,19 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
-function buildLogoHeader(logoUrl) {
-  if (logoUrl) {
+function buildLogoHeader({ logoUrl = "", logoCid = "", siteUrl = "" } = {}) {
+  const src = logoCid ? `cid:${logoCid}` : logoUrl;
+
+  if (src) {
+    const homeUrl = siteUrl || "https://www.mv3.com.br";
     return `
-      <a href="https://www.mv3.com.br" target="_blank" style="text-decoration:none;">
+      <a href="${escapeHtml(homeUrl)}" target="_blank" style="text-decoration:none;">
         <img
-          src="${escapeHtml(logoUrl)}"
-          width="200"
-          height="40"
+          src="${escapeHtml(src)}"
+          width="210"
+          height="48"
           alt="MNPR Capital"
-          style="display:block;margin:0 auto;max-width:200px;height:40px;border:0;"
+          style="display:block;margin:0 auto;height:48px;width:auto;max-width:210px;border:0;"
         >
       </a>`;
   }
@@ -36,7 +39,7 @@ function buildLogoHeader(logoUrl) {
 
 export function buildPropostaEmail(dados, options = {}) {
   const { nome, email, telefone, perfil, processo, valor, observacao, prioridade } = dados;
-  const logoUrl = options.logoUrl || "";
+  const { logoUrl = "", logoCid = "", siteUrl = "" } = options;
 
   const rows = [
     ["Perfil", perfil],
@@ -72,7 +75,7 @@ export function buildPropostaEmail(dados, options = {}) {
     .filter(Boolean)
     .join("\n");
 
-  const logoHtml = buildLogoHeader(logoUrl);
+  const logoHtml = buildLogoHeader({ logoUrl, logoCid, siteUrl });
 
   const html = `
 <!DOCTYPE html>
