@@ -14,7 +14,6 @@
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
   --gold-gradient: linear-gradient(135deg, #c9a227, #e8c547);
-  --gold-shimmer: linear-gradient(135deg, #c9a227, #f3d97b, #c9a227, #e8c547, #c9a227);
   --mesh-navy: radial-gradient(circle at 50% 0%, #112240 0%, #0a1628 100%);
   --glow-gold-soft: 0 0 15px rgba(201, 162, 39, 0.4);
   --glow-gold-hover: 0 0 24px rgba(201, 162, 39, 0.35), 0 8px 32px rgba(10, 22, 40, 0.14);
@@ -541,13 +540,15 @@ a {
   font-size: clamp(1.85rem, 4vw, 2.5rem);
   font-weight: 600;
   line-height: 1.25;
-  background: var(--gold-shimmer);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: goldShimmer 7s ease-in-out infinite;
+}
+
+.section-header h2 {
+  color: var(--navy);
+}
+
+.section-dark .section-header h2,
+.contato-info h2 {
+  color: var(--gold-light);
 }
 
 .hero h1 {
@@ -556,11 +557,7 @@ a {
   letter-spacing: 0.05em;
   line-height: 1.1;
   margin-bottom: 1rem;
-}
-
-@keyframes goldShimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  color: var(--gold-light);
 }
 
 .section-desc {
@@ -1570,13 +1567,6 @@ a {
     transform: none;
     animation: none !important;
     transition: none !important;
-  }
-
-  .section-header h2,
-  .contato-info h2,
-  .hero h1 {
-    animation: none !important;
-    background-size: 100% auto;
   }
 
   .btn-gold,
