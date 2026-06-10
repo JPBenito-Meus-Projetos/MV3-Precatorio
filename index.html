@@ -19,7 +19,8 @@
   <meta name="twitter:description" content="Transformamos precatórios em soluções financeiras estratégicas de alto padrão.">
   <meta name="twitter:image" content="__SITE_URL__/IMG/hero-bg.png">
   <title>MNPR Capital | Soluções Financeiras em Precatórios</title>
-  <link rel="icon" href="IMG/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="IMG/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="IMG/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -324,14 +325,16 @@
               </select>
             </div>
             <div class="form-group form-group-perfil-outro" id="perfil-outro-group" hidden>
-              <label for="perfil_outro">Especifique seu perfil</label>
+              <label for="perfil_outro">Especifique seu perfil <span class="label-required" aria-hidden="true">*</span></label>
               <input
                 type="text"
                 id="perfil_outro"
                 name="perfil_outro"
                 maxlength="80"
+                minlength="2"
                 placeholder="Ex.: Investidor, credor, inventariante..."
                 autocomplete="off"
+                aria-required="false"
               >
             </div>
             <div class="form-row">
@@ -363,11 +366,12 @@
               <label for="observacao">Observação <span class="label-optional">(opcional)</span></label>
               <textarea id="observacao" name="observacao" rows="4" maxlength="2000" placeholder="Informações adicionais sobre o precatório"></textarea>
             </div>
-            <div class="form-group form-group-consent">
+            <div class="form-group form-group-consent" id="consent-group">
               <label class="consent-label" for="consent">
-                <input type="checkbox" id="consent" name="consent" value="1" required>
+                <input type="checkbox" id="consent" name="consent" value="1" required aria-describedby="consent-error">
                 <span>Li e concordo com a <a href="privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e autorizo o tratamento dos meus dados para análise da proposta.</span>
               </label>
+              <p class="consent-error" id="consent-error" role="alert" hidden></p>
             </div>
             <button type="submit" class="btn btn-gold btn-block">Enviar proposta</button>
             <p class="form-feedback" id="form-feedback" role="status" aria-live="polite" hidden></p>

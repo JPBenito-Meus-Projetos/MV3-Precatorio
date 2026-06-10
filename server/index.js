@@ -138,8 +138,8 @@ function validatePropostaPayload(body) {
     return { ok: false, message: "Selecione um perfil válido." };
   }
 
-  if (perfilVal === "outro" && perfilOutroVal.length < 2) {
-    return { ok: false, message: "Informe seu perfil." };
+  if (perfilVal === "outro" && perfilOutroVal.trim().length < 2) {
+    return { ok: false, message: "Especifique seu perfil — campo obrigatório." };
   }
 
   if (processoDigits.length < 7) {

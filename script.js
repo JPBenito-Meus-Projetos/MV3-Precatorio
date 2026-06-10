@@ -167,6 +167,8 @@ function showFormFeedback(message, type, autoHideMs = type === "success" ? 5000 
 
 function getFieldErrorEl(field) {
   if (!field?.name && !field?.id) return null;
+  if (field.type === "checkbox") return null;
+
   const id = `${field.name || field.id}-error`;
   let el = document.getElementById(id);
   if (!el && field.parentElement) {
@@ -179,6 +181,29 @@ function getFieldErrorEl(field) {
     field.setAttribute("aria-describedby", describedBy ? `${describedBy} ${id}` : id);
   }
   return el;
+}
+
+const consentError = document.getElementById("consent-error");
+const consentGroup = document.getElementById("consent-group");
+
+function setConsentInvalid(message) {
+  const consentField = document.getElementById("consent");
+  consentField?.setAttribute("aria-invalid", "true");
+  consentGroup?.classList.add("is-invalid");
+  if (consentError) {
+    consentError.textContent = message;
+    consentError.hidden = false;
+  }
+}
+
+function clearConsentError() {
+  const consentField = document.getElementById("consent");
+  consentField?.removeAttribute("aria-invalid");
+  consentGroup?.classList.remove("is-invalid");
+  if (consentError) {
+    consentError.textContent = "";
+    consentError.hidden = true;
+  }
 }
 
 function setFieldInvalid(field, group, message) {
@@ -202,6 +227,7 @@ function clearFormErrors(form) {
     err.textContent = "";
     err.hidden = true;
   });
+  clearConsentError();
 }
 
 function validatePropostaForm(form) {
@@ -262,17 +288,29 @@ function validatePropostaForm(form) {
 
   if (perfilField?.value === "outro") {
     const outroVal = String(perfilOutroField?.value ?? "").trim();
-    if (outroVal.length < 2) {
-      setFieldInvalid(perfilOutroField, perfilOutroGroup, "Informe seu perfil.");
-      return { valid: false, message: "Informe seu perfil.", field: perfilOutroField };
+    if (!outroVal || outroVal.length < 2) {
+      setFieldInvalid(
+        perfilOutroField,
+        perfilOutroGroup,
+        "Especifique seu perfil — campo obrigatório."
+      );
+      return {
+        valid: false,
+        message: "Especifique seu perfil — campo obrigatório.",
+        field: perfilOutroField,
+      };
     }
   }
 
   const consentField = form.elements.consent;
   if (!consentField?.checked) {
-    const consentGroup = consentField?.closest(".form-group");
-    setFieldInvalid(consentField, consentGroup, "Aceite a Política de Privacidade para continuar.");
-    return { valid: false, message: "É necessário aceitar a Política de Privacidade.", field: consentField };
+    setConsentInvalid("Marque a caixa para aceitar a Política de Privacidade.");
+    return {
+      valid: false,
+      message: "Marque a caixa para aceitar a Política de Privacidade.",
+      field: consentField,
+      consentOnly: true,
+    };
   }
 
   return { valid: true };
@@ -282,24 +320,53 @@ const perfilSelect = document.getElementById("perfil");
 const perfilOutroGroup = document.getElementById("perfil-outro-group");
 const perfilOutroInput = document.getElementById("perfil_outro");
 
+function isPerfilOutroValid(value) {
+  return String(value ?? "").trim().length >= 2;
+}
+
 function togglePerfilOutro() {
   if (!perfilSelect || !perfilOutroGroup || !perfilOutroInput) return;
 
   const isOutro = perfilSelect.value === "outro";
   perfilOutroGroup.hidden = !isOutro;
   perfilOutroInput.required = isOutro;
+  perfilOutroInput.setAttribute("aria-required", String(isOutro));
 
   if (!isOutro) {
     perfilOutroInput.value = "";
+    perfilOutroInput.removeAttribute("aria-invalid");
     perfilOutroGroup.classList.remove("is-invalid");
+    const err = perfilOutroGroup.querySelector(".field-error");
+    if (err) {
+      err.textContent = "";
+      err.hidden = true;
+    }
   } else {
     requestAnimationFrame(() => perfilOutroInput.focus());
   }
 }
 
+function validatePerfilOutroField(showError = true) {
+  if (!perfilSelect || !perfilOutroInput || perfilSelect.value !== "outro") return true;
+
+  const valid = isPerfilOutroValid(perfilOutroInput.value);
+  if (!valid && showError) {
+    setFieldInvalid(
+      perfilOutroInput,
+      perfilOutroGroup,
+      "Especifique seu perfil — campo obrigatório."
+    );
+  }
+  return valid;
+}
+
 if (perfilSelect) {
   perfilSelect.addEventListener("change", togglePerfilOutro);
   togglePerfilOutro();
+}
+
+if (perfilOutroInput) {
+  perfilOutroInput.addEventListener("blur", () => validatePerfilOutroField(true));
 }
 
 if (telefoneInput) {
@@ -347,6 +414,9 @@ if (contatoForm) {
         err.textContent = "";
         err.hidden = true;
       }
+      if (field.name === "consent" || field.id === "consent") {
+        clearConsentError();
+      }
       hideFormFeedback();
     };
     field.addEventListener("input", clearError);
@@ -361,18 +431,32 @@ if (contatoForm) {
 
     const validation = validatePropostaForm(contatoForm);
     if (!validation.valid) {
-      showFormFeedback(validation.message, "error");
+      if (validation.consentOnly) {
+        hideFormFeedback();
+      } else {
+        showFormFeedback(validation.message, "error");
+      }
       validation.field?.focus();
       return;
     }
 
     const data = new FormData(contatoForm);
     const perfil = String(data.get("perfil") ?? "").trim();
+    const perfilOutro =
+      perfil === "outro" ? String(data.get("perfil_outro") ?? "").trim() : "";
+
+    if (perfil === "outro" && !isPerfilOutroValid(perfilOutro)) {
+      validatePerfilOutroField(true);
+      showFormFeedback("Especifique seu perfil — campo obrigatório.", "error");
+      perfilOutroInput?.focus();
+      return;
+    }
+
     const payload = {
       nome: String(data.get("nome") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
       perfil,
-      perfil_outro: perfil === "outro" ? String(data.get("perfil_outro") ?? "").trim() : "",
+      perfil_outro: perfilOutro,
       telefone: String(data.get("telefone") ?? "").trim(),
       processo: String(data.get("processo") ?? "").trim(),
       valor: String(data.get("valor") ?? "").trim(),
