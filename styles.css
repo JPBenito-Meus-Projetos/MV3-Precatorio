@@ -149,11 +149,21 @@ a {
 
 .logo-img {
   display: block;
-  height: 40px;
+  flex-shrink: 0;
+  height: 58px;
   width: auto;
+  max-width: min(240px, 52vw);
   object-fit: contain;
   object-position: left center;
-  background: transparent;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+@media (max-width: 480px) {
+  .logo-img {
+    height: 46px;
+    max-width: min(200px, 58vw);
+  }
 }
 
 .nav-list {
