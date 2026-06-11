@@ -35,7 +35,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 76px;
+  scroll-padding-top: 78px;
 }
 
 body {
@@ -133,8 +133,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 76px;
-  max-height: 76px;
+  min-height: 78px;
+  max-height: 78px;
   gap: 1rem;
 }
 
@@ -149,10 +149,10 @@ a {
 .logo-img {
   display: block;
   flex-shrink: 0;
-  height: 58px;
-  width: auto;
-  max-width: min(240px, 52vw);
-  object-fit: contain;
+  height: 62px;
+  width: 175px;
+  max-width: min(175px, 54vw);
+  object-fit: cover;
   object-position: left center;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -160,8 +160,9 @@ a {
 
 @media (max-width: 480px) {
   .logo-img {
-    height: 46px;
-    max-width: min(200px, 58vw);
+    height: 48px;
+    width: 140px;
+    max-width: min(140px, 62vw);
   }
 }
 
@@ -1632,7 +1633,7 @@ a {
 
   .nav {
     position: fixed;
-    top: 76px;
+    top: 78px;
     left: 0;
     right: 0;
     background: radial-gradient(circle at 50% 0%, #112240 0%, #0a1628 100%);

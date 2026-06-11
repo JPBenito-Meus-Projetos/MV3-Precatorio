@@ -47,7 +47,7 @@ const RATE_WINDOW_MS = 15 * 60 * 1000;
 const RATE_MAX_REQUESTS = 5;
 const rateLimitStore = new Map();
 const EMAIL_LOGO_CID = "mnpr-logo";
-const EMAIL_LOGO_PATH = path.join(ROOT, "IMG", "logo-header.png");
+const EMAIL_LOGO_PATH = path.join(ROOT, "IMG", "logo-adaptavel.png");
 
 let mailTransporter = null;
 
@@ -67,7 +67,7 @@ function resolveEmailLogo(req) {
     siteUrl,
     attachments: [
       {
-        filename: "logo-header.png",
+        filename: "logo-adaptavel.png",
         path: EMAIL_LOGO_PATH,
         cid: EMAIL_LOGO_CID,
       },
