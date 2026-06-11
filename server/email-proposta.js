@@ -15,10 +15,10 @@ function buildLogoHeader({ logoUrl = "", logoCid = "", siteUrl = "" } = {}) {
       <a href="${escapeHtml(homeUrl)}" target="_blank" style="text-decoration:none;">
         <img
           src="${escapeHtml(src)}"
-          width="103"
-          height="58"
+          width="175"
+          height="62"
           alt="MNPR Capital"
-          style="display:block;margin:0 auto;height:58px;width:auto;max-width:120px;border:0;"
+          style="display:block;margin:0 auto;height:54px;width:152px;max-width:152px;object-fit:cover;object-position:left center;border:0;"
         >
       </a>`;
   }
