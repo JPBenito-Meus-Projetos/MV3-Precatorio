@@ -28,11 +28,12 @@ const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER;
-const PROPOSTA_DESTINO = process.env.PROPOSTA_DESTINO || "joao.benito@mv3.com.br";
+const PROPOSTA_DESTINO = process.env.PROPOSTA_DESTINO || "contato@mnprcapital.com.br";
+const PROPOSTA_CC = process.env.PROPOSTA_CC || "";
 const EMAIL_LOGO_URL = process.env.EMAIL_LOGO_URL || "";
 const SITE_URL = process.env.SITE_URL || "";
 const CONTACT_PHONE = process.env.CONTACT_PHONE || "(11) 3000-0000";
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || PROPOSTA_DESTINO;
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "contato@mnprcapital.com.br";
 
 const LIMITS = {
   nome: 120,
@@ -101,13 +102,20 @@ function isRateLimited(ip) {
   return record.count > RATE_MAX_REQUESTS;
 }
 
+function parseEmailList(value) {
+  return String(value ?? "")
+    .split(/[,;]/)
+    .map((email) => email.trim())
+    .filter((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+}
+
 function getMailTransporter() {
   if (!mailTransporter) {
     mailTransporter = nodemailer.createTransport({
       host: SMTP_HOST,
       port: SMTP_PORT,
-      secure: false,
-      requireTLS: true,
+      secure: SMTP_PORT === 465,
+      requireTLS: SMTP_PORT === 587,
       auth: {
         user: SMTP_USER,
         pass: SMTP_PASS.replace(/\s/g, ""),
@@ -294,10 +302,13 @@ app.post("/api/enviar-proposta", async (req, res) => {
   const logoOptions = resolveEmailLogo(req);
   const { text, html } = buildPropostaEmail(dados, logoOptions);
 
+  const propostaCc = parseEmailList(PROPOSTA_CC);
+
   try {
     await getMailTransporter().sendMail({
       from: `"MNPR Capital" <${SMTP_FROM}>`,
       to: PROPOSTA_DESTINO,
+      ...(propostaCc.length ? { cc: propostaCc } : {}),
       replyTo: dados.email,
       subject: `${dados.prioridade.subjectTag}Venda de Precatório — MNPR Capital`,
       headers: {
@@ -331,5 +342,8 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Site disponível em http://localhost:${PORT}`);
-  console.log(`E-mail: ${SMTP_FROM} → ${PROPOSTA_DESTINO} (${SMTP_HOST})`);
+  const ccList = parseEmailList(PROPOSTA_CC);
+  const ccInfo = ccList.length ? ` (cópia: ${ccList.join(", ")})` : "";
+  console.log(`E-mail: ${SMTP_FROM} → ${PROPOSTA_DESTINO}${ccInfo} (${SMTP_HOST})`);
+  console.log(`Contato no site: ${CONTACT_EMAIL}`);
 });

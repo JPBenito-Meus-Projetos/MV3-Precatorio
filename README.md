@@ -5,7 +5,7 @@ Site institucional da MNPR Capital com formulário de propostas de precatórios 
 ## Requisitos
 
 - [Node.js](https://nodejs.org) LTS (v20+)
-- Conta Microsoft 365 com SMTP habilitado
+- Conta de e-mail corporativo com SMTP (HostGator: `mail.seudominio.com.br`)
 
 ## Instalação
 
@@ -18,18 +18,19 @@ npm install
 Copie `.env.example` para `.env` e preencha:
 
 ```env
-SMTP_HOST=smtp.office365.com
+SMTP_HOST=mail.mnprcapital.com.br
 SMTP_PORT=587
-SMTP_USER=seu_email@mv3.com.br
-SMTP_PASS=sua_senha_ou_senha_de_app
-SMTP_FROM=seu_email@mv3.com.br
-PROPOSTA_DESTINO=destino@mv3.com.br
+SMTP_USER=contato@mnprcapital.com.br
+SMTP_PASS=senha_do_email
+SMTP_FROM=contato@mnprcapital.com.br
+PROPOSTA_DESTINO=contato@mnprcapital.com.br
+PROPOSTA_CC=marcelo.santos@mnprcapital.com.br,paulo.mota@mnprcapital.com.br,nilson.vieira@mnprcapital.com.br,renato.ungaretti@mnprcapital.com.br
 PORT=3000
-NODE_ENV=development
+NODE_ENV=production
 
-SITE_URL=https://www.seudominio.com.br
+SITE_URL=https://www.mnprcapital.com.br
 CONTACT_PHONE=(11) 99999-9999
-CONTACT_EMAIL=contato@empresa.com.br
+CONTACT_EMAIL=contato@mnprcapital.com.br
 ```
 
 > O arquivo `.env` **não** é enviado ao GitHub (está no `.gitignore`).
