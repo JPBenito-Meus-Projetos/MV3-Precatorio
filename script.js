@@ -488,12 +488,8 @@ if (contatoForm) {
       contatoForm.reset();
       togglePerfilOutro();
     } catch {
-      const isLocal =
-        location.hostname === "localhost" || location.hostname === "127.0.0.1";
       showFormFeedback(
-        isLocal
-          ? "Erro de conexão. Inicie o servidor com npm start e acesse http://localhost:3000"
-          : "Erro de conexão. Tente novamente em alguns instantes.",
+        "Erro de conexão. Tente novamente em alguns instantes.",
         "error"
       );
     } finally {

@@ -35,34 +35,26 @@ CONTACT_EMAIL=contato@mnprcapital.com.br
 
 > O arquivo `.env` **não** é enviado ao GitHub (está no `.gitignore`).
 
-## Executar localmente
+## Publicar na HostGator
 
-```powershell
-$env:Path = "C:\Program Files\nodejs;" + $env:Path
-node server/index.js
-```
-
-Ou dê dois cliques em `start.bat`.
-
-Acesse: **http://localhost:3000**
-
-> O formulário só funciona com o servidor rodando. Não abra o `index.html` diretamente.
-
-## Produção
+1. Rode `npm run build` para gerar a pasta `dist/`.
+2. Envie o conteúdo de `dist/` para o servidor (FTP ou Gerenciador de Arquivos).
+3. Crie o arquivo `.env` **no servidor** com as mesmas variáveis acima.
+4. No cPanel, configure uma **aplicação Node.js** apontando para `server/index.js`.
+5. Execute `npm install` e inicie com `npm start`.
 
 Defina no servidor:
 
 ```env
 NODE_ENV=production
-SITE_URL=https://www.seudominio.com.br
+SITE_URL=https://www.mnprcapital.com.br
 ```
 
 Recomendações:
 
-- Hospedar em Render, Railway, VPS ou similar
-- HTTPS com proxy reverso (redirecionamento automático em produção)
+- HTTPS ativo no domínio (redirecionamento automático em produção)
 - Manter `.env` apenas no servidor
-- Habilitar SMTP AUTH na conta Microsoft 365
+- O formulário exige o Node.js rodando — HTML estático sozinho não envia e-mail
 
 ## Estrutura
 
@@ -78,7 +70,6 @@ Recomendações:
 │   └── prioridade.js     # Pontuação interna
 ├── IMG/                # Imagens do site
 ├── .env.example
-└── start.bat
 ```
 
 ## Boas práticas implementadas
